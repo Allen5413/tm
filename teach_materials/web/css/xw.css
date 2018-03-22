@@ -1,0 +1,79 @@
+@charset "utf-8";
+
+body{background:#f4f4f4;}
+
+.bg-f4-pt{
+	background:#F4F4F4;
+}
+a:hover,a:focus{text-decoration:none;}
+
+.header .close{background:url(../images/ico-x.png) no-repeat; width:14px; height:14px; background-size:100% 100%; display:inline-block;position: absolute;top: 14px;left: 10px;}
+.header .t-user{background:url(../images/ico-user.png) no-repeat; width:16px; height:16px; background-size:100% 100%; top:14px;}
+
+.header .btn{background-color:#fff; border-radius:4px; padding:0 .27rem; color:#00B787; height:30px; line-height:30px; top:7px;}
+
+
+.zf-basic-info{background:#fff; height:100%; text-align:left;}
+.zf-basic-info .list-info{padding:0 10px; background:#fff;}
+.zf-basic-info .list-info li{border-bottom:solid #f0f0f0 1px; padding:15px 0; font-size:16px;}
+.zf-basic-info .list-info li .col-1{float:left; width:17%; text-align:center;}
+.zf-basic-info .list-info li .col-2{float:left; width:83%; padding-left:5px;}
+@media screen and (min-width: 375px) {
+	.zf-basic-info .list-info li .col-1{width:14%;}
+	.zf-basic-info .list-info li .col-2{width:86%;}
+}
+.zf-basic-info .list-info li:after{clear:both; content:""; display:inline-block;}
+.zf-basic-info .list-info li:last-child{border:0;}
+.zf-basic-info .title{background:#f4f4f4; padding:15px 10px; text-align:center; font-size:17px; color:#aaa;}
+
+.form-1 .list-info li label{display:inline-block; border:solid #f2f2f2 1px; height:42px; line-height:42px; width:100%; padding:0 6px; color:#ccc;}
+/*.form-1 .list-info li label:focus,.form-1 .list-info li label:hover,*/.form-1,.list-info li.selected label{color:#FF7D28; border-color:#FF7D28;}
+.form-1 .list-info li label:focus input,.form-1 .list-info li label:hover input{color:#FF7D28;}
+.zf-basic-info .btn{padding:20px 20px 35px; text-align:center;}
+.zf-basic-info .btn a{display:inline-block; width:92%; text-align:center; padding:15px; color:#fff; background:#00B686; font-size:16px; border-radius:4px;}
+
+.tips-success{padding:30px; width:86%; margin:0 auto;}
+.tips-success .ico-success{padding:15px 0; margin:0 auto; width:60%;}
+.tips-success .ico-success img{}
+.tips-success p{font-size:20px; color:#06B889; text-align:center;}
+.back-prev{padding:10px 0 30px; text-align:center;}
+.back-prev a{color:#acacac; font-size:16px;}
+
+
+.order-info-list{}
+.order-info-list .mod-order{background:#fff; border-bottom:solid #e5e5e5 1px; margin-bottom:20px; padding-left:15px;}
+.order-info-list .mod-order .title{border-bottom:solid #e5e5e5 1px; padding:15px 15px 15px 0; font-size:16px;}
+.order-info-list .mod-order .title .sit-rt{float:right; font-size:14px; position:relative; top:3px;}
+.order-info-list .mod-order .info{padding:10px 15px 10px 0; font-size:16px;}
+.order-info-list .mod-order .info p{padding:10px 0;}
+.order-info-list .mod-order .info .tg{color:#adadad; margin-right:15px;}
+.order-info-list .logis-list{padding:10px 15px 10px 5px;}
+.logis-list li{background:url(../images/ico-rat-2.png) 0 top no-repeat; padding:0 0 0 40px; font-size:16px;}
+.logis-list li .con{padding:14px 0 10px; border-bottom:solid #e9e9e9 1px; line-height:1.5em}
+.logis-list li .grey{color:#acacac;}
+.logis-list li .green{color:#00b686;}
+.logis-list li p.time{color:#ccc; font-size:14px; text-align:right;}
+.logis-list li:first-child{background:url(../images/ico-rat-1.png) 0 15px no-repeat;}
+.logis-list li:last-child{background:url(../images/ico-rat-3.png) 0 0 no-repeat;}
+.logis-list li.end{color:#00b686;}
+
+.record-list{padding:10px 0;}
+.record-list li{padding:10px 15px 10px 0; border-bottom:solid #e9e9e9 1px; font-size:16px;}
+.record-list li:after{clear:both; content:""; display:block;}
+.record-list li .col-5{float:left; width:75%;}
+.record-list li .s-num{width:25%; float:left; text-align:center;}
+.record-list li .col-1{float:left; width:29%; text-align:center; color:#adadad;}
+.record-list li .col-2{float:left; width:15%; text-align:center;}
+.record-list li .col-3{float:left; width:56%; text-align:left;}
+.record-list li:last-child{border:0;}
+@media screen and (min-width: 375px) {
+	.record-list li .col-1{width:25%;}
+	.record-list li .col-3{width:60%;}
+}
+
+.order-info-list .mod-order .tit-wt{padding:20px 10px 5px 0; font-size:18px;}
+
+.order-info-list .mod-order .sum-right{text-align:right; font-size:16px; color:#FF6C0F; padding:15px 20px 15px; border-top:solid #e9e9e9 1px;}
+
+.green{color:#00b686;}
+.org{color:#FF6C0F;}
