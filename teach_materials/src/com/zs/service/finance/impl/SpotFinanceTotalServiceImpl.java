@@ -635,7 +635,7 @@ public class SpotFinanceTotalServiceImpl extends EntityServiceImpl implements Sp
                 BigDecimal rewardMoneyTotal = new BigDecimal(jsonObject.get("rewardMoneyTotal").toString());
                 sumTotalPrice = sumTotalPrice.add(rewardMoneyTotal).setScale(2, BigDecimal.ROUND_HALF_UP);
 
-                ExcelCell runCell_16 = new ExcelCell(index,(byte)0, jsonObject.get("spotCode").toString(),false,"",9);
+                ExcelCell runCell_16 = new ExcelCell(index,(byte)0, "("+jsonObject.get("spotCode").toString()+")"+jsonObject.get("spotName").toString(),false,"",9);
                 ExcelCell runCell_17 = new ExcelCell(index,(byte)1, null == jsonObject.get("semester") || StringUtils.isEmpty(jsonObject.get("semester").toString()) || "null".equals(jsonObject.get("semester").toString()) ? "上学期" : jsonObject.get("semester").toString(),false,"",9);
                 ExcelCell runCell_18 = new ExcelCell(index,(byte)2, null == jsonObject.get("buy") || StringUtils.isEmpty(jsonObject.get("buy").toString()) || "null".equals(jsonObject.get("buy").toString()) ? "0" : jsonObject.get("buy").toString(),false,"",9);
                 ExcelCell runCell_19 = new ExcelCell(index,(byte)3, null == jsonObject.get("ratio") || StringUtils.isEmpty(jsonObject.get("ratio").toString()) || "null".equals(jsonObject.get("ratio").toString()) ? "0%" : jsonObject.get("ratio").toString(),false,"",9);
