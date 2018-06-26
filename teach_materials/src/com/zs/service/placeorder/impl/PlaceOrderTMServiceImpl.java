@@ -132,10 +132,11 @@ public class PlaceOrderTMServiceImpl extends EntityServiceImpl implements PlaceO
                 }
             }
             //如果库存不满足，就修改订单信息
-            if(!isStock){
-                teachMaterialPlaceOrder.setIsStock(TeachMaterialPlaceOrder.ISSTOCK_NOT);
-                teachMaterialPlaceOrderDAO.update(teachMaterialPlaceOrder);
-            }
+            //2017-09-25  邸老师说不存在库存不足的订单了
+//            if(!isStock){
+//                teachMaterialPlaceOrder.setIsStock(TeachMaterialPlaceOrder.ISSTOCK_NOT);
+//                teachMaterialPlaceOrderDAO.update(teachMaterialPlaceOrder);
+//            }
 
             //存储订单日志
             PlaceOrderLog PlaceOrderLog = new PlaceOrderLog();

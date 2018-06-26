@@ -296,12 +296,7 @@
       app.msg("请选择要确认的订单", 1);
       return;
     }
-    app.confirm("您确定要确认选中的订单？", function(){
-      $(btnObj).button('loading');
-      setTimeout(function(){
-        app.edit("${pageContext.request.contextPath}/confirmOnceOrder/batchConfirm.htm", {"ids":ids});
-      }, 100);
-    });
+    app.openOneBtnDialog('${pageContext.request.contextPath}/confirmOnceOrder/batchConfirm.htm?ids='+ids, '订单确认中', 400, 280);
   }
 
 

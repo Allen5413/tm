@@ -7,6 +7,7 @@ import com.zs.config.LevelEnum;
 import com.zs.config.SpecEnum;
 import com.zs.dao.FindPageByWhereDAO;
 import com.zs.dao.finance.FindSpotFinanceTotalDAO;
+import com.zs.dao.finance.spotexpense.SpotExpenseDao;
 import com.zs.dao.finance.studentexpense.CenterPayDao;
 import com.zs.dao.finance.studentexpense.SpotPayPolTempDao;
 import com.zs.dao.sync.spot.FindSpotByCodeDAO;
@@ -30,7 +31,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.io.ByteArrayOutputStream;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -38,7 +38,7 @@ import java.util.*;
  * Created by Allen on 2015/12/7.
  */
 @Service("spotFinanceTotalService")
-public class SpotFinanceTotalServiceImpl extends EntityServiceImpl implements SpotFinanceTotalService {
+public class SpotFinanceTotalServiceImpl extends EntityServiceImpl<SpotExpense, SpotExpenseDao> implements SpotFinanceTotalService {
 
     @Resource
     private FindSpotByCodeDAO findSpotByCodeDAO;
