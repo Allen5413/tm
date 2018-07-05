@@ -120,6 +120,7 @@ public class AddOncePurchaseOrderServiceImpl extends EntityServiceImpl<OncePurch
 
     /**
      * 生成采购单关联教材
+     * 2018-07-05 邸老师要求在数量上都乘系数1.6
      * @param
      * @return
      */
@@ -129,7 +130,7 @@ public class AddOncePurchaseOrderServiceImpl extends EntityServiceImpl<OncePurch
         oncePurchaseOrderTM.setCode(code);
         oncePurchaseOrderTM.setCourseCode(courseCode);
         oncePurchaseOrderTM.setTeachMaterialId(tmId);
-        oncePurchaseOrderTM.setTeachMaterialCount(count);
+        oncePurchaseOrderTM.setTeachMaterialCount((int)Math.ceil(count*1.6));
         oncePurchaseOrderTM.setPutStorageCount(0);
         oncePurchaseOrderTM.setState(OncePurchaseOrderTM.STATE_NORMAL);
         oncePurchaseOrderTM.setCreator(loginName);
