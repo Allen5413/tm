@@ -128,10 +128,13 @@ public class ConfirmOnceOrderServiceImpl extends EntityServiceImpl<StudentBookOn
         StudentBookOnceOrder maxCodeOrder = findStudentBookOnceOrderForMaxCodeDAO.find(semester.getId());
         if(null != maxCodeOrder){
             String maxOrderCode = maxCodeOrder.getOrderCode();
+            System.out.println("maxOrderCode: -------------  "+maxOrderCode);
             num = Integer.parseInt(maxOrderCode.substring(maxOrderCode.length()-6, maxOrderCode.length()));
         }
+        System.out.println("num: -------------  "+num);
         //生成学生订单号
         String orderCode = OrderCodeTools.createStudentOnceOrderCodeForConfirm(semester.getYear(), semester.getQuarter(), num + 1);
+        System.out.println("orderCode: -------------  "+orderCode);
 
         studentBookOnceOrder.setSemesterId(semester.getId());
         studentBookOnceOrder.setOrderCode(orderCode);
