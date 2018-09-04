@@ -69,15 +69,16 @@ public class AddStudentBookOrderTMCountController  extends
             }
             //查询学生信息
             Student student = findStudentByCodeService.getStudentByCode(studentBookOrder.getStudentCode());
-            if(null != student){
-                IssueRange issueRange = findIssueRangeBySpotCodeService.getIssueRangeBySpotCode(student.getSpotCode());
-                if(null != issueRange){
-                    TeachMaterialStock teachMaterialStock = findTeachMaterialStockBytmIdAndChannelIdService.findTeachMaterialStockBytmIdAndChannelId(studentBookOrderTM.getTeachMaterialId(), issueRange.getIssueChannelId());
-                    if((null == teachMaterialStock || null == teachMaterialStock.getStock() || count > teachMaterialStock.getStock()) && 0 < count){
-                        throw new BusinessException("该教材库存不足，不能在添加了");
-                    }
-                }
-            }
+            //不计算教材库存了  2018-09-04  邸老师
+//            if(null != student){
+//                IssueRange issueRange = findIssueRangeBySpotCodeService.getIssueRangeBySpotCode(student.getSpotCode());
+//                if(null != issueRange){
+//                    TeachMaterialStock teachMaterialStock = findTeachMaterialStockBytmIdAndChannelIdService.findTeachMaterialStockBytmIdAndChannelId(studentBookOrderTM.getTeachMaterialId(), issueRange.getIssueChannelId());
+//                    if((null == teachMaterialStock || null == teachMaterialStock.getStock() || count > teachMaterialStock.getStock()) && 0 < count){
+//                        throw new BusinessException("该教材库存不足，不能在添加了");
+//                    }
+//                }
+//            }
             if(1 < studentBookOrderTM.getCount() + count){
                 throw new BusinessException("教材数量不能大于1");
             }

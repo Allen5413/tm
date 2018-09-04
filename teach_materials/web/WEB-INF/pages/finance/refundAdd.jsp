@@ -274,7 +274,7 @@
             <td colspan="99">
                 退款说明：<input type="text" id="detail">
                 <button type="button" class="am-btn am-btn-primary btn-loading-example" onclick="enterMoney()"><span class="am-icon-plus"></span> 确定</button>&nbsp;&nbsp;
-                银行名称：<input type="text" id="bankName" name="bankName">&nbsp;&nbsp;
+                银行名称(具体到支行)：<input type="text" id="bankName" name="bankName">&nbsp;&nbsp;
                 银行卡号：<input type="text" id="bankCode" name="bankCode">&nbsp;&nbsp;
                 收款单位：<input type="text" id="company" name="company">
             </td>

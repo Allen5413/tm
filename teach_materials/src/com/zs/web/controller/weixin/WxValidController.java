@@ -121,14 +121,15 @@ public class WxValidController extends LoggerController {
                 button.setUrl(url);
                 buttonList.add(button);
 
-                button = new WxMenu.WxMenuButton();
-                button.setName("电子教材");
-                button.setType("view");
-                config.setOauth2redirectUri("http://xiwang.attop.com/wxPay/openEBookPay.htm");
-                wxMpService.setWxMpConfigStorage(config);
-                String url4 = wxMpService.oauth2buildAuthorizationUrl(WxConsts.OAUTH2_SCOPE_BASE, null);
-                button.setUrl(url4);
-                buttonList.add(button);
+//2018-08-07  刘总说屏蔽掉
+//                button = new WxMenu.WxMenuButton();
+//                button.setName("电子教材");
+//                button.setType("view");
+//                config.setOauth2redirectUri("http://xiwang.attop.com/wxPay/openEBookPay.htm");
+//                wxMpService.setWxMpConfigStorage(config);
+//                String url4 = wxMpService.oauth2buildAuthorizationUrl(WxConsts.OAUTH2_SCOPE_BASE, null);
+//                button.setUrl(url4);
+//                buttonList.add(button);
 
                 button = new WxMenu.WxMenuButton();
                 button.setName("我的账户");
@@ -259,7 +260,7 @@ public class WxValidController extends LoggerController {
                             WxMpCustomMessage message = WxMpCustomMessage
                                     .TEXT()
                                     .toUser(openId)
-                                    .content("尊敬的用户您好，感谢您关注西网公众号。\n\n您可以直接回复证件号码，来查询个人账户、个人订单等相关信息")
+                                    .content("尊敬的用户您好，感谢您关注西网公众号。\n\n您可以直接回复证件号码（报名时填写的身份证号、军官证号、护照等），来查询个人账户、个人订单等相关信息")
                                     .build();
                             wxMpService.customMessageSend(message);
                         }
