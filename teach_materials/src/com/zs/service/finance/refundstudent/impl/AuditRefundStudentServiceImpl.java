@@ -5,9 +5,13 @@ import com.feinno.framework.common.service.EntityServiceImpl;
 import com.zs.dao.finance.refund.FindRefundByCodeDAO;
 import com.zs.dao.finance.refundlog.RefundLogDAO;
 import com.zs.dao.finance.refundstudent.RefundStudentDAO;
+import com.zs.dao.sale.onceorder.EditOnceOrderForEnterNotSendByStudentCodeDAO;
+import com.zs.dao.sale.studentbookorder.EditStudentBookOrderForEnterNotSendByStudentCodeDAO;
+import com.zs.dao.sync.student.EditStudentIsForeverSendTmByCodeDAO;
 import com.zs.domain.finance.Refund;
 import com.zs.domain.finance.RefundLog;
 import com.zs.domain.finance.RefundStudent;
+import com.zs.domain.sync.Student;
 import com.zs.service.finance.refundstudent.AuditRefundStudentService;
 import com.zs.service.finance.refundstudent.FindRefundStudentByCodeService;
 import com.zs.service.finance.spotexpenseoth.SetSpotExpenseOthBySpotCodeService;
@@ -42,6 +46,12 @@ public class AuditRefundStudentServiceImpl extends EntityServiceImpl<RefundStude
     private RefundStudentExpensePayByCodeService refundStudentExpensePayByCodeService;
     @Resource
     private SetSpotExpenseOthBySpotCodeService setSpotExpenseOthBySpotCodeService;
+    @Resource
+    private EditStudentBookOrderForEnterNotSendByStudentCodeDAO editStudentBookOrderForEnterNotSendByStudentCodeDAO;
+    @Resource
+    private EditOnceOrderForEnterNotSendByStudentCodeDAO editOnceOrderForEnterNotSendByStudentCodeDAO;
+    @Resource
+    private EditStudentIsForeverSendTmByCodeDAO editStudentIsForeverSendTmByCodeDAO;
 
     @Override
     @Transactional
@@ -89,6 +99,10 @@ public class AuditRefundStudentServiceImpl extends EntityServiceImpl<RefundStude
                 refundStudent.setState(RefundStudent.STATE_PASS);
                 //扣除学生费用
                 refundStudentExpensePayByCodeService.refund(refundStudent.getStudentCode(), refundStudent.getMoney(), userName);
+                //把当前该学生还未发出的订单，改为未确认；学生是否永久发书标识改为：否
+                editStudentBookOrderForEnterNotSendByStudentCodeDAO.edit(refundStudent.getStudentCode());
+                editOnceOrderForEnterNotSendByStudentCodeDAO.edit(refundStudent.getStudentCode());
+                editStudentIsForeverSendTmByCodeDAO.edit(Student.IS_FOREVER_SNEDTM_NOT, refundStudent.getStudentCode());
             }else{
                 refundStudent.setState(RefundStudent.STATE_NOT_PASS);
             }
