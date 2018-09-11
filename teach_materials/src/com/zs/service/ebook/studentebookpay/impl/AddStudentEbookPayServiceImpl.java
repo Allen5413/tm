@@ -25,6 +25,7 @@ public class AddStudentEbookPayServiceImpl extends EntityServiceImpl<StudentEBoo
         if(null != studentEBookPay2){
             throw new BusinessException("学号："+studentEBookPay.getStudentCode()+", 已经购买过电子教材");
         }
-        super.save(studentEBookPay);
+        //暂时关闭电子教材功能 2018-09-07
+        //super.save(studentEBookPay);
     }
 }

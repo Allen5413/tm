@@ -44,24 +44,7 @@ import com.zs.weixin.mp.bean.WxMpMaterialArticleUpdate;
 import com.zs.weixin.mp.bean.WxMpMaterialNews;
 import com.zs.weixin.mp.bean.WxMpSemanticQuery;
 import com.zs.weixin.mp.bean.WxMpTemplateMessage;
-import com.zs.weixin.mp.bean.result.WxMpMassSendResult;
-import com.zs.weixin.mp.bean.result.WxMpMassUploadResult;
-import com.zs.weixin.mp.bean.result.WxMpMaterialCountResult;
-import com.zs.weixin.mp.bean.result.WxMpMaterialFileBatchGetResult;
-import com.zs.weixin.mp.bean.result.WxMpMaterialNewsBatchGetResult;
-import com.zs.weixin.mp.bean.result.WxMpMaterialUploadResult;
-import com.zs.weixin.mp.bean.result.WxMpMaterialVideoInfoResult;
-import com.zs.weixin.mp.bean.result.WxMpOAuth2AccessToken;
-import com.zs.weixin.mp.bean.result.WxMpPayCallback;
-import com.zs.weixin.mp.bean.result.WxMpPayResult;
-import com.zs.weixin.mp.bean.result.WxMpPrepayIdResult;
-import com.zs.weixin.mp.bean.result.WxMpQrCodeTicket;
-import com.zs.weixin.mp.bean.result.WxMpSemanticQueryResult;
-import com.zs.weixin.mp.bean.result.WxMpUser;
-import com.zs.weixin.mp.bean.result.WxMpUserCumulate;
-import com.zs.weixin.mp.bean.result.WxMpUserList;
-import com.zs.weixin.mp.bean.result.WxMpUserSummary;
-import com.zs.weixin.mp.bean.result.WxRedpackResult;
+import com.zs.weixin.mp.bean.result.*;
 import com.zs.weixin.mp.util.http.MaterialDeleteRequestExecutor;
 import com.zs.weixin.mp.util.http.MaterialNewsInfoRequestExecutor;
 import com.zs.weixin.mp.util.http.MaterialUploadRequestExecutor;
@@ -851,6 +834,58 @@ public class WxMpServiceImpl implements WxMpService {
       xstream.alias("xml", WxMpPrepayIdResult.class);
       WxMpPrepayIdResult wxMpPrepayIdResult = (WxMpPrepayIdResult) xstream.fromXML(responseContent);
       return wxMpPrepayIdResult;
+    } catch (IOException e) {
+      throw new RuntimeException("Failed to get prepay id due to IO exception.", e);
+    }
+  }
+
+  @Override
+  public WxMpRefundResult getRefundId(String openId, String outTradeNo, String outRefundNo, double amt, double refundFee, String tradeType, String ip, String callbackUrl)throws Exception {
+    Map<String, String> packageParams = new HashMap<String, String>();
+    packageParams.put("appid", wxMpConfigStorage.getAppId());
+    packageParams.put("mch_id", wxMpConfigStorage.getPartnerId());
+    packageParams.put("out_trade_no", outTradeNo);
+    packageParams.put("out_refund_no", outRefundNo);
+    packageParams.put("total_fee", (int) (amt * 100) + "");
+    packageParams.put("refund_fee", (int) (refundFee * 100) + "");
+    packageParams.put("notify_url", callbackUrl);
+    packageParams.put("openid", openId);
+
+    return getRefundId(packageParams);
+  }
+
+  public WxMpRefundResult getRefundId(final Map<String, String> parameters)throws Exception{
+    String nonce_str = System.currentTimeMillis() + "";
+
+    final SortedMap<String, String> packageParams = new TreeMap<String, String>(parameters);
+    packageParams.put("appid", wxMpConfigStorage.getAppId());
+    packageParams.put("mch_id", wxMpConfigStorage.getPartnerId());
+    packageParams.put("nonce_str", nonce_str);
+    checkParameters(packageParams);
+
+    String sign = WxCryptUtil.createSign(packageParams, wxMpConfigStorage.getPartnerKey());
+    packageParams.put("sign", sign);
+
+    StringBuilder request = new StringBuilder("<xml>");
+    for (Entry<String, String> para : packageParams.entrySet()) {
+      request.append(String.format("<%s>%s</%s>", para.getKey(), para.getValue(), para.getKey()));
+    }
+    request.append("</xml>");
+
+    HttpPost httpPost = new HttpPost("https://api.mch.weixin.qq.com/secapi/pay/refund");
+    if (httpProxy != null) {
+      RequestConfig config = RequestConfig.custom().setProxy(httpProxy).build();
+      httpPost.setConfig(config);
+    }
+    StringEntity entity = new StringEntity(request.toString(), Consts.UTF_8);
+    httpPost.setEntity(entity);
+    try {
+      CloseableHttpResponse response = getHttpclient().execute(httpPost);
+      String responseContent = Utf8ResponseHandler.INSTANCE.handleResponse(response);
+      XStream xstream = XStreamInitializer.getInstance();
+      xstream.alias("xml", WxMpPrepayIdResult.class);
+      WxMpRefundResult wxMpRefundResult = (WxMpRefundResult) xstream.fromXML(responseContent);
+      return wxMpRefundResult;
     } catch (IOException e) {
       throw new RuntimeException("Failed to get prepay id due to IO exception.", e);
     }

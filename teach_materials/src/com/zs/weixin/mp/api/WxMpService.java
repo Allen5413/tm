@@ -720,6 +720,18 @@ public interface WxMpService {
   WxMpPrepayIdResult getPrepayId(Map<String, String> parameters)throws Exception;
 
   /**
+   * 申请退款
+   */
+  @Deprecated
+  WxMpRefundResult getRefundId(String openId, String outTradeNo, String outRefundNo, double amt, double refundFee, String tradeType, String ip, String notifyUrl)throws Exception;
+
+  /**
+   * 申请退款
+   * @param parameters
+   */
+  WxMpRefundResult getRefundId(Map<String, String> parameters)throws Exception;
+
+  /**
    * 该接口调用“统一下单”接口，并拼装JSSDK发起支付请求需要的参数
    * 详见http://mp.weixin.qq.com/wiki/7/aaa137b55fb2e0456bf8dd9148dd613f.html#.E5.8F.91.E8.B5.B7.E4.B8.80.E4.B8.AA.E5.BE.AE.E4.BF.A1.E6.94.AF.E4.BB.98.E8.AF.B7.E6.B1.82
    * @param parameters
