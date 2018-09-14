@@ -154,7 +154,7 @@ public class WxRefundController extends LoggerController {
             //生成退订单号
             String refundCode = timeStamp + findWxRefundLogForMaxCodeService.find(timeStamp);
             Map<String, String> parameters = new HashMap<String, String>();
-            parameters.put("out_trade_no", "1536895544738001");
+            parameters.put("out_trade_no", orderCode);
             parameters.put("out_refund_no", refundCode);
             parameters.put("total_fee", totalFee+"");
             parameters.put("refund_fee", ((int) (money * 100))+"");
