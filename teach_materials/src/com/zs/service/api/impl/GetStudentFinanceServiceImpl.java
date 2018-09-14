@@ -53,8 +53,8 @@ public class GetStudentFinanceServiceImpl extends EntityServiceImpl<Student, Stu
         BigDecimal totalPriceBD = new BigDecimal(0);
         Semester semester = findNowSemesterService.getNowSemester();
         Student student = findStudentByCodeService.getStudentByCode(code);
-        if(null == student){
-            throw new BusinessException("没有找到学生信息");
+        if(null == student || student.getState() != 0){
+            throw new BusinessException("该学生不是在籍学生");
         }
         if(semester.getYear().toString().equals(student.getStudyEnterYear().toString()) && semester.getQuarter().toString().equals(student.getStudyQuarter().toString())){
             //新生的情况，直接通过专业层次获取对应课程，然后查询课程教材的费用

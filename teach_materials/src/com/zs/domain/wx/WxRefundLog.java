@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 /**
- * 调用微信支付接口记录情况
+ * 调用微信退款接口记录情况
  * Created by Allen on 2015/10/27.
  */
 @Entity
@@ -18,15 +18,13 @@ public class WxRefundLog extends AbstractEntity {
 
     private Long id;
     private String studentCode;
-    private String openId;
     private String orderCode;
+    private String payOrderCode;
     private int money;
-    private String timeStamp;
-    private String nonceStr;
-    private String packages;
-    private String paySign;
+    private String returnCode;
     private String returnMsg;
-    private int state;
+    private String resultCode;
+    private String errCodeDes;
     private Date operateTime = new Date();
 
     @Id
@@ -40,20 +38,20 @@ public class WxRefundLog extends AbstractEntity {
         this.id = id;
     }
 
-    public String getOpenId() {
-        return openId;
-    }
-
-    public void setOpenId(String openId) {
-        this.openId = openId;
-    }
-
     public String getOrderCode() {
         return orderCode;
     }
 
     public void setOrderCode(String orderCode) {
         this.orderCode = orderCode;
+    }
+
+    public String getPayOrderCode() {
+        return payOrderCode;
+    }
+
+    public void setPayOrderCode(String payOrderCode) {
+        this.payOrderCode = payOrderCode;
     }
 
     public int getMoney() {
@@ -64,52 +62,12 @@ public class WxRefundLog extends AbstractEntity {
         this.money = money;
     }
 
-    public String getTimeStamp() {
-        return timeStamp;
-    }
-
-    public void setTimeStamp(String timeStamp) {
-        this.timeStamp = timeStamp;
-    }
-
-    public String getNonceStr() {
-        return nonceStr;
-    }
-
-    public void setNonceStr(String nonceStr) {
-        this.nonceStr = nonceStr;
-    }
-
-    public String getPackages() {
-        return packages;
-    }
-
-    public void setPackages(String packages) {
-        this.packages = packages;
-    }
-
-    public String getPaySign() {
-        return paySign;
-    }
-
-    public void setPaySign(String paySign) {
-        this.paySign = paySign;
-    }
-
     public String getReturnMsg() {
         return returnMsg;
     }
 
     public void setReturnMsg(String returnMsg) {
         this.returnMsg = returnMsg;
-    }
-
-    public int getState() {
-        return state;
-    }
-
-    public void setState(int state) {
-        this.state = state;
     }
 
     public Date getOperateTime() {
@@ -126,5 +84,29 @@ public class WxRefundLog extends AbstractEntity {
 
     public void setStudentCode(String studentCode) {
         this.studentCode = studentCode;
+    }
+
+    public String getReturnCode() {
+        return returnCode;
+    }
+
+    public void setReturnCode(String returnCode) {
+        this.returnCode = returnCode;
+    }
+
+    public String getResultCode() {
+        return resultCode;
+    }
+
+    public void setResultCode(String resultCode) {
+        this.resultCode = resultCode;
+    }
+
+    public String getErrCodeDes() {
+        return errCodeDes;
+    }
+
+    public void setErrCodeDes(String errCodeDes) {
+        this.errCodeDes = errCodeDes;
     }
 }

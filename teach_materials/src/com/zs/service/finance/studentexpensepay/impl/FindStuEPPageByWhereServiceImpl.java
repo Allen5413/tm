@@ -73,6 +73,9 @@ public class FindStuEPPageByWhereServiceImpl extends EntityServiceImpl<StudentEx
                     case  5:
                         payTypeStr = "微信";
                         break;
+                    case  6:
+                        payTypeStr = "微信退费";
+                        break;
                     default:
                         break;
                 }

@@ -1,9 +1,7 @@
 package com.zs.weixin.mp.api;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringReader;
+import java.io.*;
+import java.security.KeyStore;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.Map.Entry;
@@ -64,6 +62,7 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.conn.ssl.SSLContexts;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.BasicResponseHandler;
@@ -80,6 +79,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.internal.Streams;
 import com.google.gson.stream.JsonReader;
 import com.thoughtworks.xstream.XStream;
+
+import javax.net.ssl.SSLContext;
 
 public class WxMpServiceImpl implements WxMpService {
 
@@ -858,10 +859,11 @@ public class WxMpServiceImpl implements WxMpService {
     String nonce_str = System.currentTimeMillis() + "";
 
     final SortedMap<String, String> packageParams = new TreeMap<String, String>(parameters);
+    String mchId = wxMpConfigStorage.getPartnerId();
     packageParams.put("appid", wxMpConfigStorage.getAppId());
-    packageParams.put("mch_id", wxMpConfigStorage.getPartnerId());
+    packageParams.put("mch_id", mchId);
     packageParams.put("nonce_str", nonce_str);
-    checkParameters(packageParams);
+    //checkParameters(packageParams);
 
     String sign = WxCryptUtil.createSign(packageParams, wxMpConfigStorage.getPartnerKey());
     packageParams.put("sign", sign);
@@ -872,6 +874,18 @@ public class WxMpServiceImpl implements WxMpService {
     }
     request.append("</xml>");
 
+    //退款证书处理部分
+    KeyStore keyStore = KeyStore.getInstance("PKCS12");
+    FileInputStream instream = new FileInputStream(new File("E://cert/apiclient_cert.p12"));//加载本地的证书进行https加密传输
+    try {
+      keyStore.load(instream, mchId.toCharArray());
+    } finally {
+      instream.close();
+    }
+    SSLContext sslcontext = SSLContexts.custom().loadKeyMaterial(keyStore, mchId.toCharArray()).build();
+    SSLConnectionSocketFactory sslf = new SSLConnectionSocketFactory(sslcontext);
+    CloseableHttpClient httpclient = HttpClients.custom().setSSLSocketFactory(sslf).build();
+
     HttpPost httpPost = new HttpPost("https://api.mch.weixin.qq.com/secapi/pay/refund");
     if (httpProxy != null) {
       RequestConfig config = RequestConfig.custom().setProxy(httpProxy).build();
@@ -880,13 +894,14 @@ public class WxMpServiceImpl implements WxMpService {
     StringEntity entity = new StringEntity(request.toString(), Consts.UTF_8);
     httpPost.setEntity(entity);
     try {
-      CloseableHttpResponse response = getHttpclient().execute(httpPost);
+      CloseableHttpResponse response = httpclient.execute(httpPost);
       String responseContent = Utf8ResponseHandler.INSTANCE.handleResponse(response);
       XStream xstream = XStreamInitializer.getInstance();
-      xstream.alias("xml", WxMpPrepayIdResult.class);
+      xstream.alias("xml", WxMpRefundResult.class);
       WxMpRefundResult wxMpRefundResult = (WxMpRefundResult) xstream.fromXML(responseContent);
       return wxMpRefundResult;
     } catch (IOException e) {
+      e.printStackTrace();
       throw new RuntimeException("Failed to get prepay id due to IO exception.", e);
     }
   }

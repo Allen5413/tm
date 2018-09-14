@@ -9,8 +9,10 @@ import com.zs.domain.finance.StudentExpensePay;
 import com.zs.domain.sync.SpotWx;
 import com.zs.domain.sync.Student;
 import com.zs.domain.wx.WxPayLog;
+import com.zs.domain.wx.WxRefundLog;
 import com.zs.service.api.GetStudentFinanceService;
 import com.zs.service.finance.studentexpense.FindStudentExpenseByCodeService;
+import com.zs.service.finance.studentexpensepay.RefundWxStudentExpensePayService;
 import com.zs.service.sync.spotwx.FindSpotWxByOpenIdService;
 import com.zs.service.sync.student.FindStudentByCodeService;
 import com.zs.service.sync.student.FindStudentByOpenIdService;
@@ -18,9 +20,12 @@ import com.zs.service.wx.notify.WxNotifyService;
 import com.zs.service.wx.paylog.AddWxPayLogService;
 import com.zs.service.wx.paylog.FindWxPayLogByStudentCodeService;
 import com.zs.service.wx.paylog.FindWxPayLogForMaxCodeService;
+import com.zs.service.wx.refundlog.AddWxRefundLogService;
 import com.zs.service.wx.refundlog.FindWxRefundLogForMaxCodeService;
 import com.zs.tools.HttpRequestTools;
 import com.zs.tools.QRCodeTools;
+import com.zs.tools.StringTools;
+import com.zs.tools.UserTools;
 import com.zs.web.controller.LoggerController;
 import com.zs.weixin.common.util.crypto.WxCryptUtil;
 import com.zs.weixin.mp.api.WxMpInMemoryConfigStorage;
@@ -29,7 +34,9 @@ import com.zs.weixin.mp.api.WxMpServiceImpl;
 import com.zs.weixin.mp.bean.result.WxMpOAuth2AccessToken;
 import com.zs.weixin.mp.bean.result.WxMpPrepayIdResult;
 import com.zs.weixin.mp.bean.result.WxMpRefundResult;
+import freemarker.template.utility.StringUtil;
 import net.sf.json.JSONObject;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.Element;
@@ -77,6 +84,10 @@ public class WxRefundController extends LoggerController {
     private FindStudentExpenseByCodeService findStudentExpenseByCodeService;
     @Resource
     private FindWxRefundLogForMaxCodeService findWxRefundLogForMaxCodeService;
+    @Resource
+    private AddWxRefundLogService addWxRefundLogService;
+    @Resource
+    private RefundWxStudentExpensePayService refundWxStudentExpensePayService;
 
     public WxMpInMemoryConfigStorage config;
     public WxMpService wxMpService;
@@ -102,8 +113,6 @@ public class WxRefundController extends LoggerController {
              * 正式账号*/
             config.setAppId("wx79ba7069388a101a"); // 设置微信公众号的appid
             config.setSecret("1bc0d069914b1f904168fe57c0e65102"); // 设置微信公众号的app corpSecret
-            config.setOauth2redirectUri("http://xiwang.attop.com/wxPay/openPay.htm");
-
             config.setToken("XIWANG_TOKEN"); // 设置微信公众号的token
             config.setAesKey("XIWANG_KEY"); // 设置微信公众号的EncodingAESKey
             config.setPartnerId("1356478102");
@@ -145,42 +154,33 @@ public class WxRefundController extends LoggerController {
             //生成退订单号
             String refundCode = timeStamp + findWxRefundLogForMaxCodeService.find(timeStamp);
             Map<String, String> parameters = new HashMap<String, String>();
-            parameters.put("out_trade_no", orderCode);
+            parameters.put("out_trade_no", "1536895544738001");
             parameters.put("out_refund_no", refundCode);
             parameters.put("total_fee", totalFee+"");
             parameters.put("refund_fee", ((int) (money * 100))+"");
             parameters.put("notify_url", "http://xiwang.attop.com/wxRefund/notify.htm");
             WxMpRefundResult wxMpRefundResult = wxMpService.getRefundId(parameters);
-            Map<String, String> params = new HashMap<String, String>();
-            params.put("appId", config.getAppId());
-            params.put("timeStamp", timeStamp);
-            params.put("nonceStr", wxMpRefundResult.getNonce_str());
-            params.put("signType", "MD5");
-            String paySign = WxCryptUtil.createSign(params, config.getPartnerKey());
+            if(null != wxMpRefundResult){
+                WxRefundLog wxRefundLog = new WxRefundLog();
+                wxRefundLog.setStudentCode(code);
+                wxRefundLog.setOrderCode(refundCode);
+                wxRefundLog.setPayOrderCode(orderCode);
+                wxRefundLog.setMoney((int) (money * 100));
+                wxRefundLog.setReturnCode(wxMpRefundResult.getReturn_code());
+                wxRefundLog.setReturnMsg(wxMpRefundResult.getErr_code_des());
+                wxRefundLog.setResultCode(wxMpRefundResult.getResult_code());
+                wxRefundLog.setErrCodeDes(wxMpRefundResult.getErr_code_des());
+                addWxRefundLogService.save(wxRefundLog);
+            }
+            if(!StringUtils.isEmpty(wxMpRefundResult.getErr_code_des())){
+                throw new BusinessException(wxMpRefundResult.getErr_code_des());
+            }
 
-//            jsonObject.put("state", 0);
-//            jsonObject.put("appId", config.getAppId());
-//            jsonObject.put("timeStamp", timeStamp);
-//            jsonObject.put("nonceStr", wxMpPrepayIdResult.getNonce_str());
-//            jsonObject.put("package", "prepay_id="+wxMpPrepayIdResult.getPrepay_id());
-//            jsonObject.put("paySign", paySign);
-//            jsonObject.put("returnMsg", wxMpPrepayIdResult.getReturn_msg());
-
-//            WxPayLog wxPayLog = new WxPayLog();
-//            wxPayLog.setStudentCode(code);
-//            wxPayLog.setOrderCode(orderCode);
-//            wxPayLog.setBody(body);
-//            wxPayLog.setIp(ip);
-//            wxPayLog.setMoney((int) (money * 100));
-//            wxPayLog.setNonceStr(wxMpPrepayIdResult.getNonce_str());
-//            wxPayLog.setOpenId(openId);
-//            wxPayLog.setPackages("prepay_id="+wxMpPrepayIdResult.getPrepay_id());
-//            wxPayLog.setPaySign(paySign);
-//            wxPayLog.setReturnMsg(wxMpPrepayIdResult.getReturn_msg());
-//            wxPayLog.setState(WxPayLog.STATE_NOT_NOTIFY);
-//            wxPayLog.setTimeStamp(timeStamp);
-//            wxPayLog.setTradeType(tradeType);
-//            addWxPayLogService.save(wxPayLog);
+            if("SUCCESS".equals(wxMpRefundResult.getReturn_code()) && "OK".equals(wxMpRefundResult.getReturn_msg()) && "SUCCESS".equals(wxMpRefundResult.getResult_code())){
+                //添加学生的交费信息
+                refundWxStudentExpensePayService.refund(code, money, UserTools.getLoginUserForName(request));
+            }
+            jsonObject.put("state", 0);
         }catch (Exception e){
             String msg = super.outputException(request, e, log, "微信退款");
             jsonObject.put("state", 1);

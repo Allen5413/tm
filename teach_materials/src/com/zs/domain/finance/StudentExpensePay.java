@@ -23,6 +23,7 @@ public class StudentExpensePay extends AbstractEntity {
     public final static int PAY_TYPE_OTHER = 3;
     public final static int PAY_TYPE_RED = 4;
     public final static int PAY_TYPE_WX = 5;
+    public final static int PAY_TYPE_WXREFUND = 6;
 
     private Long id;                //主键id
     private String studentCode;     //学生学号
@@ -32,7 +33,7 @@ public class StudentExpensePay extends AbstractEntity {
     private String creator;         //创建人——不能修改
     private Date createTime = new Date();        //创建时间——不能修改
     private Date arrivalTime;       //银行到账时间
-    private int payType;            //缴费类型[0:网银，1:银行转账，2:现金，3:其它，4:红冲， 5:微信]
+    private int payType;            //缴费类型[0:网银，1:银行转账，2:现金，3:其它，4:红冲， 5:微信, 6:微信原路退款]
     private String remark;          //备注
     private Long parentId = -1l;          //用于设置红冲的父对象
 

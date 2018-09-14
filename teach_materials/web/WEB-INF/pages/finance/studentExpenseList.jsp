@@ -116,6 +116,7 @@
             <button type="button" class="am-btn am-btn-primary am-round" onClick="addMoney('${json.code}')"><span class="am-icon-plus"></span> 交费</button>
             <button type="button" class="am-btn am-btn-primary am-round" onClick="detail('${json.code}')"><span class="am-icon-th-list"></span> 明细</button>
             <button type="button" class="am-btn am-btn-primary am-round" onClick="downStuEB('${json.code}')"><span class="am-icon-download"></span> 下载明细</button>
+            <button type="button" class="am-btn am-btn-primary am-round" onClick="refundWX('${json.code}')"><span class="am-icon-download"></span> 微信退费</button>
           </div>
         </td>
       </tr>
@@ -160,6 +161,17 @@
       }
       $("#arrivalTime").val(wdate+" 00:00:00");
       app.add("${pageContext.request.contextPath}/addStuEP/stuEPAdd.htm", $('#addForm').serialize(), index);
+    });
+  }
+
+  function refundWX(code){
+    app.openDialog('${pageContext.request.contextPath}/refundWxStuEByCode/open.htm', '微信退款', 550, 0.2, function(index){
+      var money = $("#money").val().trim();
+      if(!vaild.vaildMoney(money)){
+        app.msg("请输入正确的金额", 1);
+        return;
+      }
+      app.add("${pageContext.request.contextPath}/wxRefund/refund.htm", {"code":code, "money":money}, index);
     });
   }
 
