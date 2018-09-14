@@ -41,7 +41,7 @@ public class WxAddressController extends LoggerController {
     public WxMpService wxMpService;
 
     @RequestMapping(value = "setAddress")
-    public String openInvoice(HttpServletRequest request, @RequestParam("code")String code){
+    public String openInvoice(HttpServletRequest request, @RequestParam("code")String code, @RequestParam(value = "openId", required = false, defaultValue = "")String openId){
         try {
             config = new WxMpInMemoryConfigStorage();
             /**
@@ -59,8 +59,10 @@ public class WxAddressController extends LoggerController {
             wxMpService = new WxMpServiceImpl();
             wxMpService.setWxMpConfigStorage(config);
 
-            WxMpOAuth2AccessToken wxMpOAuth2AccessToken = wxMpService.oauth2getAccessToken(code);
-            String openId = wxMpOAuth2AccessToken.getOpenId();
+            if(StringUtils.isEmpty(openId)) {
+                WxMpOAuth2AccessToken wxMpOAuth2AccessToken = wxMpService.oauth2getAccessToken(code);
+                openId = wxMpOAuth2AccessToken.getOpenId();
+            }
 
             SpotWx spotWx = findSpotWxByOpenIdService.find(openId);
             if(null != spotWx){

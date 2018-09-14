@@ -125,7 +125,7 @@
         if(res.err_msg == "get_brand_wcpay_request:ok"  || res.err_msg == "get_brand_wcpay_request:OK") {
 //          $("#pay").hide();
 //          $("#paySuccess").show();
-          location.href = "http://xiwang.attop.com/wxAddress/setAddress.htm";
+          location.href = "http://xiwang.attop.com/wxAddress/setAddress.htm?code=${studentCode}&openId=${openId}";
         }
         else if(res.err_msg == "get_brand_wcpay_request:cancel"  || res.err_msg == "get_brand_wcpay_request:CANCEL") {
           alert("支付已取消！");
