@@ -876,7 +876,10 @@ public class WxMpServiceImpl implements WxMpService {
 
     //退款证书处理部分
     KeyStore keyStore = KeyStore.getInstance("PKCS12");
-    FileInputStream instream = new FileInputStream(new File("E://cert/apiclient_cert.p12"));//加载本地的证书进行https加密传输
+    //加载本地的证书进行https加密传输 windows
+    //FileInputStream instream = new FileInputStream(new File("E://cert/apiclient_cert.p12"));
+    //加载本地的证书进行https加密传输 linux
+    FileInputStream instream = new FileInputStream(new File("//usr//local//cert//apiclient_cert.p12"));
     try {
       keyStore.load(instream, mchId.toCharArray());
     } finally {

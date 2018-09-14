@@ -256,88 +256,88 @@ public class WxPayController extends LoggerController {
     }
 
     /**
-     * 电子教材支付，正式用
+     * 电子教材支付，正式用   取消了2018-09-14
      * @param request
      */
-    @RequestMapping(value = "ebookPay")
-    @ResponseBody
-    public JSONObject ebookPay(HttpServletRequest request,
-                          @RequestParam("code")String code,
-                          @RequestParam("openId")String openId,
-                          @RequestParam("money")double money){
-        JSONObject jsonObject = new JSONObject();
-        try{
-            config = new WxMpInMemoryConfigStorage();
-            /**
-             * 测试账号
-             config.setAppId("wx9670fc1f7d7fc941"); // 设置微信公众号的appid
-             config.setSecret("2c4698cb1c075da218691476f0e5f482"); // 设置微信公众号的app corpSecret
-             config.setOauth2redirectUri("http://xiwang.attop.com/wxSearch/openPay.htm");*/
-
-            /**
-             * 正式账号*/
-            config.setAppId("wx79ba7069388a101a"); // 设置微信公众号的appid
-            config.setSecret("1bc0d069914b1f904168fe57c0e65102"); // 设置微信公众号的app corpSecret
-            config.setOauth2redirectUri("http://xiwang.attop.com/wxPay/openEBookPay.htm");
-
-            config.setToken("XIWANG_TOKEN"); // 设置微信公众号的token
-            config.setAesKey("XIWANG_KEY"); // 设置微信公众号的EncodingAESKey
-            config.setPartnerId("1356478102");
-            config.setPartnerKey("xiWangWeiXinPay20160705161520LQS");
-            wxMpService = new WxMpServiceImpl();
-            wxMpService.setWxMpConfigStorage(config);
-
-            StudentEBookPay studentEBookPay = findStudentEBookPayByCodeDAO.find(code);
-            if(null != studentEBookPay){
-                throw new BusinessException("您已经购买了电子教材，无需再次购买！");
-            }
-
-            //获取时间戳
-            String timeStamp = System.currentTimeMillis()+"";
-            //生成订单号
-            String orderCode = timeStamp + findWxPayLogForMaxCodeService.find(timeStamp);
-            String body = "电子教材费用";
-            String ip = HttpRequestTools.getIp(request);
-            String tradeType = "JSAPI";
-            WxMpPrepayIdResult wxMpPrepayIdResult = wxMpService.getPrepayId(openId, orderCode, money, body, tradeType, ip, "http://xiwang.attop.com/wxPay/ebookNotify.htm");
-            Map<String, String> params = new HashMap<String, String>();
-            params.put("appId", config.getAppId());
-            params.put("timeStamp", timeStamp);
-            params.put("nonceStr", wxMpPrepayIdResult.getNonce_str());
-            params.put("package", "prepay_id="+wxMpPrepayIdResult.getPrepay_id());
-            params.put("signType", "MD5");
-            String paySign = WxCryptUtil.createSign(params, config.getPartnerKey());
-
-            jsonObject.put("state", 0);
-            jsonObject.put("appId", config.getAppId());
-            jsonObject.put("timeStamp", timeStamp);
-            jsonObject.put("nonceStr", wxMpPrepayIdResult.getNonce_str());
-            jsonObject.put("package", "prepay_id="+wxMpPrepayIdResult.getPrepay_id());
-            jsonObject.put("paySign", paySign);
-            jsonObject.put("returnMsg", wxMpPrepayIdResult.getReturn_msg());
-
-            WxPayLog wxPayLog = new WxPayLog();
-            wxPayLog.setStudentCode(code);
-            wxPayLog.setOrderCode(orderCode);
-            wxPayLog.setBody(body);
-            wxPayLog.setIp(ip);
-            wxPayLog.setMoney((int) (money * 100));
-            wxPayLog.setNonceStr(wxMpPrepayIdResult.getNonce_str());
-            wxPayLog.setOpenId(openId);
-            wxPayLog.setPackages("prepay_id="+wxMpPrepayIdResult.getPrepay_id());
-            wxPayLog.setPaySign(paySign);
-            wxPayLog.setReturnMsg(wxMpPrepayIdResult.getReturn_msg());
-            wxPayLog.setState(WxPayLog.STATE_NOT_NOTIFY);
-            wxPayLog.setTimeStamp(timeStamp);
-            wxPayLog.setTradeType(tradeType);
-            addWxPayLogService.save(wxPayLog);
-        }catch (Exception e){
-            String msg = super.outputException(request, e, log, "微信支付");
-            jsonObject.put("state", 1);
-            jsonObject.put("msg", msg);
-        }
-        return jsonObject;
-    }
+//    @RequestMapping(value = "ebookPay")
+//    @ResponseBody
+//    public JSONObject ebookPay(HttpServletRequest request,
+//                          @RequestParam("code")String code,
+//                          @RequestParam("openId")String openId,
+//                          @RequestParam("money")double money){
+//        JSONObject jsonObject = new JSONObject();
+//        try{
+//            config = new WxMpInMemoryConfigStorage();
+//            /**
+//             * 测试账号
+//             config.setAppId("wx9670fc1f7d7fc941"); // 设置微信公众号的appid
+//             config.setSecret("2c4698cb1c075da218691476f0e5f482"); // 设置微信公众号的app corpSecret
+//             config.setOauth2redirectUri("http://xiwang.attop.com/wxSearch/openPay.htm");*/
+//
+//            /**
+//             * 正式账号*/
+//            config.setAppId("wx79ba7069388a101a"); // 设置微信公众号的appid
+//            config.setSecret("1bc0d069914b1f904168fe57c0e65102"); // 设置微信公众号的app corpSecret
+//            config.setOauth2redirectUri("http://xiwang.attop.com/wxPay/openEBookPay.htm");
+//
+//            config.setToken("XIWANG_TOKEN"); // 设置微信公众号的token
+//            config.setAesKey("XIWANG_KEY"); // 设置微信公众号的EncodingAESKey
+//            config.setPartnerId("1356478102");
+//            config.setPartnerKey("xiWangWeiXinPay20160705161520LQS");
+//            wxMpService = new WxMpServiceImpl();
+//            wxMpService.setWxMpConfigStorage(config);
+//
+//            StudentEBookPay studentEBookPay = findStudentEBookPayByCodeDAO.find(code);
+//            if(null != studentEBookPay){
+//                throw new BusinessException("您已经购买了电子教材，无需再次购买！");
+//            }
+//
+//            //获取时间戳
+//            String timeStamp = System.currentTimeMillis()+"";
+//            //生成订单号
+//            String orderCode = timeStamp + findWxPayLogForMaxCodeService.find(timeStamp);
+//            String body = "电子教材费用";
+//            String ip = HttpRequestTools.getIp(request);
+//            String tradeType = "JSAPI";
+//            WxMpPrepayIdResult wxMpPrepayIdResult = wxMpService.getPrepayId(openId, orderCode, money, body, tradeType, ip, "http://xiwang.attop.com/wxPay/ebookNotify.htm");
+//            Map<String, String> params = new HashMap<String, String>();
+//            params.put("appId", config.getAppId());
+//            params.put("timeStamp", timeStamp);
+//            params.put("nonceStr", wxMpPrepayIdResult.getNonce_str());
+//            params.put("package", "prepay_id="+wxMpPrepayIdResult.getPrepay_id());
+//            params.put("signType", "MD5");
+//            String paySign = WxCryptUtil.createSign(params, config.getPartnerKey());
+//
+//            jsonObject.put("state", 0);
+//            jsonObject.put("appId", config.getAppId());
+//            jsonObject.put("timeStamp", timeStamp);
+//            jsonObject.put("nonceStr", wxMpPrepayIdResult.getNonce_str());
+//            jsonObject.put("package", "prepay_id="+wxMpPrepayIdResult.getPrepay_id());
+//            jsonObject.put("paySign", paySign);
+//            jsonObject.put("returnMsg", wxMpPrepayIdResult.getReturn_msg());
+//
+//            WxPayLog wxPayLog = new WxPayLog();
+//            wxPayLog.setStudentCode(code);
+//            wxPayLog.setOrderCode(orderCode);
+//            wxPayLog.setBody(body);
+//            wxPayLog.setIp(ip);
+//            wxPayLog.setMoney((int) (money * 100));
+//            wxPayLog.setNonceStr(wxMpPrepayIdResult.getNonce_str());
+//            wxPayLog.setOpenId(openId);
+//            wxPayLog.setPackages("prepay_id="+wxMpPrepayIdResult.getPrepay_id());
+//            wxPayLog.setPaySign(paySign);
+//            wxPayLog.setReturnMsg(wxMpPrepayIdResult.getReturn_msg());
+//            wxPayLog.setState(WxPayLog.STATE_NOT_NOTIFY);
+//            wxPayLog.setTimeStamp(timeStamp);
+//            wxPayLog.setTradeType(tradeType);
+//            addWxPayLogService.save(wxPayLog);
+//        }catch (Exception e){
+//            String msg = super.outputException(request, e, log, "微信支付");
+//            jsonObject.put("state", 1);
+//            jsonObject.put("msg", msg);
+//        }
+//        return jsonObject;
+//    }
 
     /**
      * PC端扫码支付，正式用
@@ -521,45 +521,45 @@ public class WxPayController extends LoggerController {
     }
 
     /**
-     * 电子教材支付回调通知，正式用
+     * 电子教材支付回调通知，正式用   停用了2018-09-14
      * @param request
      */
-    @RequestMapping(value = "ebookNotify")
-    @ResponseBody
-    public String ebookNotify(HttpServletRequest request){
-        System.out.println("-----------------------------------  ebookNotify  ---------------------------------------");
-        InputStream is = null;
-        try {
-            // 解析结果存储在HashMap
-            Map<String, String> map = new HashMap<String, String>();
-            is = request.getInputStream();
-            // 读取输入流
-            SAXReader reader = new SAXReader();
-            Document document = reader.read(is);
-            // 得到xml根元素
-            Element root = document.getRootElement();
-            // 得到根元素的所有子节点
-            List<Element> elementList = root.elements();
-
-            // 遍历所有子节点
-            for (Element e : elementList) {
-                map.put(e.getName(), e.getText());
-            }
-            wxNotifyService.ebookNotify(map);
-        } catch (Exception er) {
-            er.printStackTrace();
-        }finally {
-            // 释放资源
-            if(null != is) {
-                try {
-                    is.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                is = null;
-            }
-        }
-        String returnStr = "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>";
-        return returnStr;
-    }
+//    @RequestMapping(value = "ebookNotify")
+//    @ResponseBody
+//    public String ebookNotify(HttpServletRequest request){
+//        System.out.println("-----------------------------------  ebookNotify  ---------------------------------------");
+//        InputStream is = null;
+//        try {
+//            // 解析结果存储在HashMap
+//            Map<String, String> map = new HashMap<String, String>();
+//            is = request.getInputStream();
+//            // 读取输入流
+//            SAXReader reader = new SAXReader();
+//            Document document = reader.read(is);
+//            // 得到xml根元素
+//            Element root = document.getRootElement();
+//            // 得到根元素的所有子节点
+//            List<Element> elementList = root.elements();
+//
+//            // 遍历所有子节点
+//            for (Element e : elementList) {
+//                map.put(e.getName(), e.getText());
+//            }
+//            wxNotifyService.ebookNotify(map);
+//        } catch (Exception er) {
+//            er.printStackTrace();
+//        }finally {
+//            // 释放资源
+//            if(null != is) {
+//                try {
+//                    is.close();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//                is = null;
+//            }
+//        }
+//        String returnStr = "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>";
+//        return returnStr;
+//    }
 }

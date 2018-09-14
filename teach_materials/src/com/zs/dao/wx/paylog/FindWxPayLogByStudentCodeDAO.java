@@ -10,6 +10,6 @@ import java.util.List;
  * Created by Allen on 2015/10/28.
  */
 public interface FindWxPayLogByStudentCodeDAO extends EntityJpaDao<WxPayLog, Long> {
-    @Query("from WxPayLog where studentCode = ?1 order by operateTime desc")
+    @Query("from WxPayLog where studentCode = ?1 and state = 1 order by operateTime desc")
     public List<WxPayLog> find(String studentCode);
 }
