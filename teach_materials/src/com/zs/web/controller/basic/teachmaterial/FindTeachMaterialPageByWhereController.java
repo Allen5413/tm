@@ -42,6 +42,7 @@ public class FindTeachMaterialPageByWhereController extends LoggerController {
                                   @RequestParam(value="pressId", required=false, defaultValue="") String pressId,
                                   @RequestParam(value="state", required=false, defaultValue="") String state,
                                   @RequestParam(value="courseCode", required=false, defaultValue="") String courseCode,
+                                  @RequestParam(value = "isGlCourse", required = false, defaultValue = "") String isGlCourse,
                                   HttpServletRequest request) {
         try {
             //获取教材类型
@@ -56,9 +57,10 @@ public class FindTeachMaterialPageByWhereController extends LoggerController {
             params.put("pressId", pressId);
             params.put("state", state);
             params.put("courseCode", courseCode);
+            params.put("isGlCourse", isGlCourse);
             PageInfo pageInfo = getPageInfo(request);
             Map<String, Boolean> sortMap = getSortMap(request);
-            sortMap.put("tm.operate_time", false);
+            sortMap.put("t.operate_time", false);
             pageInfo = findTeachMaterialPageByWhereService.findPageByWhere(pageInfo, params, sortMap);
 
             request.setAttribute("teachMaterialTypeList", teachMaterialTypeList);

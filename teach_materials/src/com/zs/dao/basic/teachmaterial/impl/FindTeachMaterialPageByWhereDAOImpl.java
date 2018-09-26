@@ -3,6 +3,7 @@ package com.zs.dao.basic.teachmaterial.impl;
 import com.feinno.framework.common.dao.support.PageInfo;
 import com.zs.dao.BaseQueryDao;
 import com.zs.dao.FindPageByWhereDAO;
+import freemarker.template.utility.StringUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -23,8 +24,9 @@ public class FindTeachMaterialPageByWhereDAOImpl extends BaseQueryDao implements
         teachMaterialPageInfo.setCurrentPage(pageInfo.getCurrentPage());
         teachMaterialPageInfo.setCountOfCurrentPage(pageInfo.getCountOfCurrentPage());
 
-        String field = "DISTINCT tm.id, tm.isbn, tm.name, tm.author, tm.revision, tm.price, tm.state, tm.is_set, tm.operator, tm.operate_time, tm.is_spot_send, p.name as pressName, tmt.name as tmTypeName ";
-        StringBuilder sql = new StringBuilder("from teach_material tm left join press p on tm.press_id = p.id " +
+        String field = "*";
+        StringBuilder sql = new StringBuilder("from (select DISTINCT tm.id, tm.isbn, tm.name, tm.author, tm.revision, tm.price, tm.state, tm.is_set, tm.operator, tm.operate_time, tm.is_spot_send, p.name as pressName, tmt.name as tmTypeName, IFNULL(tmc.course_code,stm.buy_course_code) course_code " +
+                "from teach_material tm left join press p on tm.press_id = p.id " +
                 "left join teach_material_type tmt on tm.teach_material_type_id = tmt.id " +
                 "left join teach_material_course tmc on tm.id = tmc.teach_material_id " +
                 "LEFT JOIN set_teach_material_tm stmtm ON tm.id = stmtm.teach_material_id " +
@@ -39,6 +41,7 @@ public class FindTeachMaterialPageByWhereDAOImpl extends BaseQueryDao implements
         String courseCode = paramsMap.get("courseCode");
         String author = paramsMap.get("author");
         String price = paramsMap.get("price");
+        String isGlCourse = paramsMap.get("isGlCourse");
 
         List<Object> param = new ArrayList<Object>();
         if(!StringUtils.isEmpty(isbn)){
@@ -78,7 +81,15 @@ public class FindTeachMaterialPageByWhereDAOImpl extends BaseQueryDao implements
             sql.append(" and (? LIKE CONCAT('%', tmc.course_code, '%') OR ? LIKE CONCAT('%', stm.buy_course_code, '%') ) ");
             param.add(courseCode);
             param.add(courseCode);
-            field += ", IFNULL(tmc.course_code,stm.buy_course_code) course_code ";
+        }
+        sql.append(") t where 1 = 1 ");
+        if(!StringUtils.isEmpty(isGlCourse)){
+            if(0 == Integer.parseInt(isGlCourse)) {
+                sql.append("and t.course_code is null ");
+            }
+            if(1 == Integer.parseInt(isGlCourse)) {
+                sql.append("and t.course_code is not null ");
+            }
         }
         if(null != sortMap) {
             sql.append("order by ");

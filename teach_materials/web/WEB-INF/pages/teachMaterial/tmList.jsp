@@ -53,11 +53,29 @@
         </select>
       </td>
     </tr>
+    <tr height="40">
+      <td align="right"><label >是否关联课程：</label></td>
+      <td>
+        <select class="select" name="isGlCourse" id="isGlCourse" data-am-selected="{maxHeight: 500, searchBox: 1}" onchange="app.changeSelect(this)">
+          <option value=""></option>
+          <option value="null">全部</option>
+          <option value="0" <c:if test="${param.isGlCourse eq '0'}">selected="selected"</c:if>>否</option>
+          <option value="1" <c:if test="${param.isGlCourse eq '1'}">selected="selected"</c:if>>是</option>
+        </select>
+      </td>
+      <td align="right"><label ></label></td>
+      <td>
+      </td>
+      <td align="right"><label ></label></td>
+      <td>
+      </td>
+    </tr>
     <tr>
       <td colspan="99" style="padding-left:20px;">
         <button type="button" id="searchBtn" class="am-btn am-btn-primary btn-loading-example"
                 data-am-loading="{spinner: 'circle-o-notch', loadingText: '查询中...', resetText: '查询超时'}"
                 onclick="app.searchFormPage($('#pageForm'), $('#pageForm').attr('action'), this)"><span class="am-icon-search"></span> 查询</button>
+        <button class="am-btn am-btn-primary am-btn-sm" type="button" onClick="down()"><span class="am-icon-download"></span> 下载</button>
       </td>
     </tr>
   </table>
@@ -204,6 +222,19 @@
     var url = '${pageContext.request.contextPath}/findCourseBytmId/doFindCourseBytmId.htm?tmId='+id;
     app.openDialog(url, '关联课程', 800, 0.7, function(index){
       app.add("${pageContext.request.contextPath}/addTMCourse/tmCourseAdd.htm", {"tmId":id, "courseCodes": $("#courseCodes").val()}, index);
+    });
+  }
+
+  function down(){
+    $.ajax({
+      cache: true,
+      type: "POST",
+      url:"${pageContext.request.contextPath}/downTeachMaterial/down.htm",
+      data:$("#pageForm").serialize(),
+      async: false,
+      success: function(data) {
+        open("${pageContext.request.contextPath}"+data);
+      }
     });
   }
 </script>
