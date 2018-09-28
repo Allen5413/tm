@@ -28,6 +28,10 @@
   var orderCount = 0;
   var packageCount = 0;
 
+  function logisticCodeOnfocus(){
+    num = 0;
+  }
+
   //回车事件
   document.onkeydown = function(e){
     var ev = document.all ? window.event : e;
@@ -93,6 +97,7 @@
           tr.append(td2);
           tr.append(td3);
           table.append(tr);
+          table.find("tr:first").after(tr);
           $("#packageCount").html(packageCount);
           $("#logisticCode").focus();
         }else{

@@ -53,7 +53,7 @@ public class FindTeachMaterialByNameOrCourseCodeController extends LoggerControl
             PageInfo pageInfo = getPageInfo(request);
             pageInfo.setCountOfCurrentPage(9999);
             Map<String, Boolean> sortMap = getSortMap(request);
-            sortMap.put("tm.operate_time", false);
+            sortMap.put("t.operate_time", false);
             pageInfo = findTeachMaterialPageByWhereService.findPageByWhere(pageInfo, params, sortMap);
 
             List<JSONObject> returnList = new ArrayList<JSONObject>();
