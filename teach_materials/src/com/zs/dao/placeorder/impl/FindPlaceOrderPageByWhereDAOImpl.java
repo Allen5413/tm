@@ -29,7 +29,7 @@ public class FindPlaceOrderPageByWhereDAOImpl extends BaseQueryDao implements Fi
         StringBuilder courseTmSql = new StringBuilder();
         courseTmSql.append("SELECT tmpo.id,tmpo.order_code,sp.code spot_code,sp.name,tmpo.spec_code,tmpo.level_code,tmpo.en_year,tmpo.en_quarter,tmpo.operator,tmpo.operate_time,tmpo.order_status,tmpo.address,tmpo.admin_name,tmpo.phone,tmpo.tel,tmpo.postal_code,sum(potm.count) tmCount,sum(tm.price * potm.count) orderPrice ");
         courseTmSql.append("FROM teach_material_place_order tmpo INNER JOIN sync_spot sp ON tmpo.spot_code = sp.`code` INNER JOIN place_order_teach_material potm ON tmpo.id = potm.order_id INNER JOIN teach_material_course tmc ON potm.course_code = tmc.course_code INNER JOIN teach_material tm ON tmc.teach_material_id = tm.id ");
-        courseTmSql.append("WHERE (CASE WHEN tmpo.order_status < '3' THEN tm.state = 0 WHEN tmpo.order_status >= '5' THEN potm.is_send = 1 ELSE 1=1 END) ");
+        courseTmSql.append("WHERE (CASE WHEN tmpo.order_status < '4' THEN tm.state = 0 WHEN tmpo.order_status >= '5' THEN potm.is_send = 1 ELSE 1=1 END) ");
         this.assembleWhere(paramsMap, courseTmSql, param);
         courseTmSql.append("GROUP BY tmpo.id,tmpo.order_code,tmpo.spec_code,tmpo.level_code,tmpo.en_year,tmpo.en_quarter,tmpo.operator,tmpo.operate_time,tmpo.order_status,tmpo.address,tmpo.admin_name,tmpo.phone,tmpo.tel,tmpo.postal_code ");
 
@@ -37,7 +37,7 @@ public class FindPlaceOrderPageByWhereDAOImpl extends BaseQueryDao implements Fi
         StringBuilder courseStmSql = new StringBuilder();
         courseStmSql.append("SELECT tmpo.id,tmpo.order_code,sp.code spot_code,sp.name,tmpo.spec_code,tmpo.level_code,tmpo.en_year,tmpo.en_quarter,tmpo.operator,tmpo.operate_time,tmpo.order_status,tmpo.address,tmpo.admin_name,tmpo.phone,tmpo.tel,tmpo.postal_code,sum(potm.count) tmCount,sum(tm.price * potm.count) orderPrice ");
         courseStmSql.append("FROM teach_material_place_order tmpo INNER JOIN sync_spot sp ON tmpo.spot_code = sp.`code` INNER JOIN place_order_teach_material potm ON tmpo.id = potm.order_id INNER JOIN set_teach_material stm ON potm.course_code = stm.buy_course_code INNER JOIN set_teach_material_tm stmtm ON stm.id = stmtm.set_teach_material_id INNER JOIN teach_material tm ON stmtm.teach_material_id = tm.id ");
-        courseStmSql.append("WHERE (CASE WHEN tmpo.order_status < '3' THEN tm.state = 0 WHEN tmpo.order_status >= '5' THEN potm.is_send = 1 ELSE 1=1 END) ");
+        courseStmSql.append("WHERE (CASE WHEN tmpo.order_status < '4' THEN tm.state = 0 WHEN tmpo.order_status >= '5' THEN potm.is_send = 1 ELSE 1=1 END) ");
         this.assembleWhere(paramsMap, courseStmSql, param);
         courseStmSql.append("GROUP BY tmpo.id,tmpo.order_code,tmpo.spec_code,tmpo.level_code,tmpo.en_year,tmpo.en_quarter,tmpo.operator,tmpo.operate_time,tmpo.order_status,tmpo.address,tmpo.admin_name,tmpo.phone,tmpo.tel,tmpo.postal_code ");
 
@@ -45,7 +45,7 @@ public class FindPlaceOrderPageByWhereDAOImpl extends BaseQueryDao implements Fi
         StringBuilder tmSql = new StringBuilder();
         tmSql.append("SELECT tmpo.id,tmpo.order_code,sp.code spot_code,sp.name,tmpo.spec_code,tmpo.level_code,tmpo.en_year,tmpo.en_quarter,tmpo.operator,tmpo.operate_time,tmpo.order_status,tmpo.address,tmpo.admin_name,tmpo.phone,tmpo.tel,tmpo.postal_code,sum(potm.count) tmCount,sum(potm.tm_price * potm.count) orderPrice ");
         tmSql.append("FROM teach_material_place_order tmpo INNER JOIN sync_spot sp ON tmpo.spot_code = sp.`code` INNER JOIN place_order_teach_material potm ON tmpo.id = potm.order_id INNER JOIN teach_material tm ON potm.teach_material_id = tm.id ");
-        tmSql.append("WHERE (CASE WHEN tmpo.order_status < '3' THEN tm.state = 0 WHEN tmpo.order_status >= '5' THEN potm.is_send = 1 ELSE 1=1 END) ");
+        tmSql.append("WHERE (CASE WHEN tmpo.order_status < '4' THEN tm.state = 0 WHEN tmpo.order_status >= '5' THEN potm.is_send = 1 ELSE 1=1 END) ");
         this.assembleWhere(paramsMap, tmSql, param);
         tmSql.append("GROUP BY tmpo.id,tmpo.order_code,tmpo.spec_code,tmpo.level_code,tmpo.en_year,tmpo.en_quarter,tmpo.operator,tmpo.operate_time,tmpo.order_status,tmpo.address,tmpo.admin_name,tmpo.phone,tmpo.tel,tmpo.postal_code ");
 

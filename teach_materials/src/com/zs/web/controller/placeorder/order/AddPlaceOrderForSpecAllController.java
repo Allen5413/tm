@@ -65,6 +65,7 @@ public class AddPlaceOrderForSpecAllController extends LoggerController {
 
         JSONObject jsonObject = new JSONObject();
         try{
+            courseCodes = courseCodes.replaceAll("，", ",");
             addPlaceOrderForSpecAllService.add(spotCode, address, adminName, phone, tel, postalCode, enYear, enQuarter, specCode, levelCode, personNum, courseCodes, UserTools.getLoginUserForName(request));
             jsonObject.put("state", 0);
         } catch (Exception e){
