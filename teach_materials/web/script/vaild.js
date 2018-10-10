@@ -8,7 +8,7 @@ function Vaildate(){}
  */
 Vaildate.prototype.vaildMoney = function(money){
     var exp = /^([1-9][\d]{0,7}|0)(\.[\d]{1,2})?$/;
-    if(exp.test(money) && money > 0){
+    if(exp.test(money) && money > -1){
         return true;
     }else{
         return false;

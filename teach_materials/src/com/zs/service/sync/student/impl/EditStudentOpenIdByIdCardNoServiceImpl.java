@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.sql.Timestamp;
+import java.util.List;
 
 /**
  * Created by Allen on 2016/5/24.
@@ -43,11 +44,12 @@ public class EditStudentOpenIdByIdCardNoServiceImpl extends EntityServiceImpl<St
             flag = 2;
             msg = "您已经绑定了，如需重新绑定请先在更多服务里面解除绑定。";
         }else{
-            Student student = findStudentByIdCardNoDAO.find(idCardNo);
-            if(null == student){
+            List<Student> studentList = findStudentByIdCardNoDAO.findList(idCardNo);
+            if(null == studentList || 0 >= studentList.size()){
                 flag = 1;
                 msg = "没有找到用户信息";
             }else{
+                Student student = studentList.get(0);
                 if(!StringUtils.isEmpty(student.getOpenId())){
                     flag = 1;
                     msg = "该证件号码已经被绑定了";
