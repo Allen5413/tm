@@ -1,7 +1,6 @@
 package com.zs.web.controller.sync.student;
 
 import com.zs.domain.sync.Student;
-import com.zs.epaysdk.EPay;
 import com.zs.service.bank.paylog.AddPayLogService;
 import com.zs.service.sync.student.FindStudentByCodeService;
 import com.zs.web.controller.LoggerController;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * Created by Allen on 2015/10/27.

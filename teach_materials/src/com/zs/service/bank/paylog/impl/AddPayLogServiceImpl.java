@@ -6,7 +6,7 @@ import com.zs.dao.bank.paylog.FindPayLogForMaxCodeDAO;
 import com.zs.dao.sync.student.FindStudentByCodeDAO;
 import com.zs.domain.bank.BankPayLog;
 import com.zs.domain.sync.Student;
-import com.zs.epaysdk.EPay;
+//import com.zs.epaysdk.EPay;
 import com.zs.service.bank.paylog.AddPayLogService;
 import com.zs.tools.UserTools;
 import org.springframework.stereotype.Service;
@@ -43,7 +43,7 @@ public class AddPayLogServiceImpl extends EntityServiceImpl<BankPayLog, FindPayL
         bankPayLog.setPayUserCode(payUserCode);
         bankPayLog.setPayUserType(payUserType);
 
-        String html = EPay.gpPay(bankPayLog.getCode(), money, "购买教材", "学生购买教材");
+        String html = "";//EPay.gpPay(bankPayLog.getCode(), money, "购买教材", "学生购买教材");
         bankPayLog.setPayForm(html);
         bankPayLog.setState(BankPayLog.STATE_WAIT);
         bankPayLog.setOperator(loginName);
