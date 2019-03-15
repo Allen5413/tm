@@ -27,6 +27,6 @@ public interface FindStudentByCourseCodeDAO extends EntityJpaDao<SelectedCourse,
      * @throws Exception
      */
     @Query(nativeQuery = true, value = "select DISTINCT sc.student_code from sync_selected_course sc, sync_student s, semester sr " +
-            "where s.code = sc.student_code and s.study_quarter = sr.year and s.study_quarter = sr.quarter and sr.is_now_semester = 0 and s.course_code = ?1")
+            "where s.code = sc.student_code and s.study_quarter = sr.year and s.study_quarter = sr.quarter and sr.is_now_semester = 0 and sc.course_code = ?1")
     public List<String> findNewStudent(String courseCode)throws Exception;
 }
