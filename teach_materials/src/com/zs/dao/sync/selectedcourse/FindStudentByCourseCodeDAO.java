@@ -13,7 +13,7 @@ public interface FindStudentByCourseCodeDAO extends EntityJpaDao<SelectedCourse,
 
     /**
      * 通过课程编号查询所有学生的信息
-     * @param studentCode
+     * @param courseCode
      * @return
      * @throws Exception
      */
@@ -22,7 +22,7 @@ public interface FindStudentByCourseCodeDAO extends EntityJpaDao<SelectedCourse,
 
     /**
      * 通过课程编号查询新生学生信息
-     * @param studentCode
+     * @param courseCode
      * @return
      * @throws Exception
      */
