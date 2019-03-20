@@ -37,7 +37,7 @@ public class FindTotalFinanceForSemesterServiceImpl extends EntityServiceImpl im
             for(Object[] obj : result){
                 JSONObject jsonObject = new JSONObject();
                 String year = obj[0]+"年";
-                String quarter = 0 == obj[1] ? "上半年" : "下半年";
+                String quarter = 0 == (int)obj[1] ? "上半年" : "下半年";
                 double buy = Double.parseDouble(obj[2].toString());
                 double pay = Double.parseDouble(obj[3].toString());
                 double own = Double.parseDouble(obj[4].toString());

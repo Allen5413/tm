@@ -126,7 +126,7 @@ public class SpotFinanceTotalServiceImpl extends EntityServiceImpl<SpotExpense, 
                 jsonConfig.registerJsonValueProcessor(Date.class, new DateJsonValueProcessorTools());
                 JSONObject jsonObject = JSONObject.fromObject(spotExpense, jsonConfig);
                 jsonObject.put("semesterId", objs[0]);
-                jsonObject.put("semesterStr", objs[1]+"年"+(0 == objs[2] ? "上学期":"下学期"));
+                jsonObject.put("semesterStr", objs[1]+"年"+(0 == (int)objs[2] ? "上学期":"下学期"));
                 jsonObject.put("totalPrice", StringTools.getFinancePrice(totalPrice+""));
                 jsonObject.put("own", StringTools.getFinancePrice(own+""));
                 //如果有欠款
