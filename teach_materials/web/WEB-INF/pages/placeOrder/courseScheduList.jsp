@@ -19,10 +19,15 @@
 			<td>
 				<select id="enYear" name="enYear" onchange="app.changeSelect(this)">
 					<option value=""></option>
-					<option value="null">全部</option>
-					<c:forEach var="enYearBean" items="${enYearList}">
-						<option value="${enYearBean}" <c:if test="${param.enYear eq enYearBean}">selected="selected" </c:if> >${enYearBean}</option>
-					</c:forEach>
+					<option value="2017" <c:if test="${param.enYear == 2017}">selected="selected" </c:if> >2017</option>
+					<option value="2018" <c:if test="${param.enYear == 2018}">selected="selected" </c:if> >2018</option>
+					<option value="2019" <c:if test="${param.enYear == 2019}">selected="selected" </c:if> >2019</option>
+					<option value="2020" <c:if test="${param.enYear == 2020}">selected="selected" </c:if> >2020</option>
+					<option value="2021" <c:if test="${param.enYear == 2021}">selected="selected" </c:if> >2021</option>
+					<option value="2022" <c:if test="${param.enYear == 2022}">selected="selected" </c:if> >2022</option>
+					<option value="2023" <c:if test="${param.enYear == 2023}">selected="selected" </c:if> >2023</option>
+					<option value="2024" <c:if test="${param.enYear == 2024}">selected="selected" </c:if> >2024</option>
+					<option value="2025" <c:if test="${param.enYear == 2025}">selected="selected" </c:if> >2025</option>
 				</select>
 			</td>
 			<td align="right"><label >入学季：</label></td>

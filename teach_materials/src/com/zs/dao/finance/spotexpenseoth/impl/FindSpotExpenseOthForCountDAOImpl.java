@@ -32,15 +32,14 @@ public class FindSpotExpenseOthForCountDAOImpl extends BaseQueryDao implements F
 //                "LEFT JOIN sync_province prov on sprov.province_code = prov.code " +
 //                "INNER JOIN spot_expense_oth seo ON s.id = seo.semester_id and sp.code = seo.spot_code WHERE 1=1 ");
 
-        StringBuilder sql = new StringBuilder("from (select s.id, s.year, s.quarter, '-' pName, sp.code, sp.name, sum(ifnull(se.pay, 0)) totalPay, " +
+        StringBuilder sql = new StringBuilder("from (select k.*, seo.clear_time, seo.id seoId from (select s.id, s.year, s.quarter, '-' pName, sp.code, sp.name, sum(ifnull(se.pay, 0)) totalPay, " +
                 "sum(ifnull(se.buy, 0)) totalBuy, sum(case when ifnull(se.pay, 0) - ifnull(se.buy, 0) > 0 then ifnull(se.pay, 0) - ifnull(se.buy, 0) else 0 end) acc, " +
-                "sum(case when ifnull(se.pay, 0) - ifnull(se.buy, 0) > 0 then 0 else ifnull(se.buy, 0) - ifnull(se.pay, 0) end) own, " +
-                "seo.clear_time, seo.id seoId ");
+                "sum(case when ifnull(se.pay, 0) - ifnull(se.buy, 0) > 0 then 0 else ifnull(se.buy, 0) - ifnull(se.pay, 0) end) own ");
         sql.append("FROM " +
                 "semester s INNER JOIN student_expense se on s.id = se.semester_id " +
                 "INNER JOIN sync_student stu on se.student_code = stu.code " +
                 "INNER JOIN sync_spot sp on stu.spot_code = sp.code " +
-                "INNER JOIN spot_expense_oth seo ON s.id = seo.semester_id and sp.code = seo.spot_code WHERE 1=1 ");
+                "WHERE 1=1 ");
 
         String provinceId = paramsMap.get("provinceId");
         String spotId = paramsMap.get("spotId");
@@ -59,7 +58,8 @@ public class FindSpotExpenseOthForCountDAOImpl extends BaseQueryDao implements F
             sql.append("and s.id = ? ");
             param.add(Long.parseLong(semesterId));
         }
-        sql.append("GROUP BY s.id, sp.code) t ORDER BY t.id, t.code");
+        sql.append("GROUP BY s.id, sp.code) k INNER JOIN spot_expense_oth seo ON k.id = seo.semester_id and k.code = seo.spot_code " +
+                "GROUP BY k.id, k. CODE ) t ORDER BY t.id desc, t.code");
         pageInfo = super.pageSqlQueryByNativeSql(pageInfo, sql.toString(), field, param.toArray());
         return pageInfo;
     }

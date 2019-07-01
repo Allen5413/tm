@@ -112,37 +112,68 @@ public class SpotFinanceTotalServiceImpl extends EntityServiceImpl<SpotExpense, 
         returnJSON.put("spotAcc", StringTools.getFinancePrice(spotAcc+""));
 
         //查询教材订购情况
-        List<Object[]> tmOrderList = findSpotFinanceTotalDAO.findTMOrderInfo(spotCode);
         JSONArray jsonArray = new JSONArray();
         double sumTotalPrice = 0, sumOwn = 0;
-        if(null != tmOrderList && 0 < tmOrderList.size()){
-            for(Object[] objs : tmOrderList){
-                double totalPrice = Double.parseDouble(objs[3].toString());
-                double own = Double.parseDouble(objs[4].toString());
-                //JSON日期转换必须要传bean，所以这里先把日期format后在设置值
-                SpotExpense spotExpense = new SpotExpense();
-                spotExpense.setClearTime(null == objs[5] ? null : DateTools.getFormatDate(objs[5]+"", DateTools.longDatePattern));
-                JsonConfig jsonConfig = new JsonConfig();
-                jsonConfig.registerJsonValueProcessor(Date.class, new DateJsonValueProcessorTools());
-                JSONObject jsonObject = JSONObject.fromObject(spotExpense, jsonConfig);
-                jsonObject.put("semesterId", objs[0]);
-                jsonObject.put("semesterStr", objs[1]+"年"+(0 == (int)objs[2] ? "上学期":"下学期"));
-                jsonObject.put("totalPrice", StringTools.getFinancePrice(totalPrice+""));
-                jsonObject.put("own", StringTools.getFinancePrice(own+""));
-                //如果有欠款
-                if(own > 0){
-                    jsonObject.put("clearTime", "");
-                }else{
-                    //没有欠款
-                    jsonObject.put("clearTime", "null".equals(jsonObject.get("clearTime").toString()) ? "" : jsonObject.get("clearTime"));
-                }
-                jsonObject.put("isRed", own > 0 ? 0 : 1);
-                jsonArray.add(jsonObject);
+        if(null != pageInfo) {
+            List<Object[]> datList = pageInfo.getPageResults();
+            if (null != datList && datList.size() > 0) {
+                for(Object[] objs : datList){
+                    double totalPrice = Double.parseDouble(objs[7].toString());
+                    double own = Double.parseDouble(objs[9].toString());
+                    //JSON日期转换必须要传bean，所以这里先把日期format后在设置值
+                    SpotExpense spotExpense = new SpotExpense();
+                    spotExpense.setClearTime(null == objs[10] ? null : DateTools.getFormatDate(objs[5]+"", DateTools.longDatePattern));
+                    JsonConfig jsonConfig = new JsonConfig();
+                    jsonConfig.registerJsonValueProcessor(Date.class, new DateJsonValueProcessorTools());
+                    JSONObject jsonObject = JSONObject.fromObject(spotExpense, jsonConfig);
+                    jsonObject.put("semesterId", objs[0]);
+                    jsonObject.put("semesterStr", objs[1]+"年"+(0 == (int)objs[2] ? "上学期":"下学期"));
+                    jsonObject.put("totalPrice", StringTools.getFinancePrice(totalPrice+""));
+                    jsonObject.put("own", StringTools.getFinancePrice(own+""));
+                    //如果有欠款
+                    if(own > 0){
+                        jsonObject.put("clearTime", "");
+                    }else{
+                        //没有欠款
+                        jsonObject.put("clearTime", "null".equals(jsonObject.get("clearTime").toString()) ? "" : jsonObject.get("clearTime"));
+                    }
+                    jsonObject.put("isRed", own > 0 ? 0 : 1);
+                    jsonArray.add(jsonObject);
 
-                sumTotalPrice = new BigDecimal(sumTotalPrice).add(new BigDecimal(totalPrice)).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
-                sumOwn = new BigDecimal(sumOwn).add(new BigDecimal(own)).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                    sumTotalPrice = new BigDecimal(sumTotalPrice).add(new BigDecimal(totalPrice)).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                    sumOwn = new BigDecimal(sumOwn).add(new BigDecimal(own)).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                }
             }
         }
+
+
+//        if(null != tmOrderList && 0 < tmOrderList.size()){
+//            for(Object[] objs : tmOrderList){
+//
+//                //JSON日期转换必须要传bean，所以这里先把日期format后在设置值
+//                SpotExpense spotExpense = new SpotExpense();
+//                spotExpense.setClearTime(null == objs[5] ? null : DateTools.getFormatDate(objs[5]+"", DateTools.longDatePattern));
+//                JsonConfig jsonConfig = new JsonConfig();
+//                jsonConfig.registerJsonValueProcessor(Date.class, new DateJsonValueProcessorTools());
+//                JSONObject jsonObject = JSONObject.fromObject(spotExpense, jsonConfig);
+//                jsonObject.put("semesterId", objs[0]);
+//                jsonObject.put("semesterStr", objs[1]+"年"+(0 == (int)objs[2] ? "上学期":"下学期"));
+//                jsonObject.put("totalPrice", StringTools.getFinancePrice(totalPrice+""));
+//                jsonObject.put("own", StringTools.getFinancePrice(own+""));
+//                //如果有欠款
+//                if(own > 0){
+//                    jsonObject.put("clearTime", "");
+//                }else{
+//                    //没有欠款
+//                    jsonObject.put("clearTime", "null".equals(jsonObject.get("clearTime").toString()) ? "" : jsonObject.get("clearTime"));
+//                }
+//                jsonObject.put("isRed", own > 0 ? 0 : 1);
+//                jsonArray.add(jsonObject);
+//
+//                sumTotalPrice = new BigDecimal(sumTotalPrice).add(new BigDecimal(totalPrice)).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+//                sumOwn = new BigDecimal(sumOwn).add(new BigDecimal(own)).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+//            }
+//        }
         returnJSON.put("tmOrderData", jsonArray);
         returnJSON.put("sumTotalPrice", StringTools.getFinancePrice(sumTotalPrice+""));
         returnJSON.put("sumOwn", StringTools.getFinancePrice(sumOwn+""));
