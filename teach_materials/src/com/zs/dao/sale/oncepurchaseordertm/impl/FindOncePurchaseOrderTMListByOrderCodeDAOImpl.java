@@ -31,7 +31,7 @@ public class FindOncePurchaseOrderTMListByOrderCodeDAOImpl extends BaseQueryDao
                 "tm. NAME tmName, " +
                 "tm.author, " +
                 "tm.price, " +
-                "ifnull(ceil(potm.teach_material_count*1.2), 0) tmCount, " +
+                "ifnull(ceil(potm.teach_material_count), 0) tmCount, " +
                 "ifnull(potm.put_storage_count, 0) storageCount, " +
                 "ifnull(tms.stock, 0) stock, " +
                 "ifnull(sorder.sCount, 0) sCount, " +

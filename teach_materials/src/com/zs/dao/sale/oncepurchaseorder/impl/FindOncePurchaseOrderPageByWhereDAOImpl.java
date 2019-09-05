@@ -24,7 +24,7 @@ public class FindOncePurchaseOrderPageByWhereDAOImpl extends BaseQueryDao
         orderPageInfo.setCountOfCurrentPage(pageInfo.getCountOfCurrentPage());
 
         String field = "t.*";
-        StringBuilder sql = new StringBuilder("from (select po.code, ic.id, ic.name as channelName, tmt.name as tmTypeName, sum(ceil(potm.teach_material_count*1.2)) as tmCount, cast(sum(ceil(potm.teach_material_count*1.2) * tm.price) as char) as price, sum(put_storage_count) as put_count, po.state, po.creator, po.create_time ");
+        StringBuilder sql = new StringBuilder("from (select po.code, ic.id, ic.name as channelName, tmt.name as tmTypeName, sum(ceil(potm.teach_material_count*1)) as tmCount, cast(sum(ceil(potm.teach_material_count*1) * tm.price) as char) as price, sum(put_storage_count) as put_count, po.state, po.creator, po.create_time ");
         sql.append("from once_purchase_order po, issue_channel ic, teach_material_type tmt, once_purchase_order_tm potm, teach_material tm where po.code = potm.code and po.issue_channel_id = ic.id and po.teach_material_type_id = tmt.id and potm.teach_material_id = tm.id ");
         String semesterId = paramsMap.get("semesterId");
         String channelId = paramsMap.get("channelId");
