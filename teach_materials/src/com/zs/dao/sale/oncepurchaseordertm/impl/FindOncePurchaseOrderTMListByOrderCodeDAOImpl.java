@@ -32,10 +32,10 @@ public class FindOncePurchaseOrderTMListByOrderCodeDAOImpl extends BaseQueryDao
                 "tm.author, " +
                 "tm.price, " +
                 "ifnull(ceil(potm.teach_material_count), 0) tmCount, " +
-                "ifnull(potm.put_storage_count, 0) storageCount, " +
-                "ifnull(tms.stock, 0) stock, " +
-                "ifnull(sorder.sCount, 0) sCount, " +
-                "ifnull(porder.pCount, 0) pCount, " +
+//                "ifnull(potm.put_storage_count, 0) storageCount, " +
+//                "ifnull(tms.stock, 0) stock, " +
+//                "ifnull(sorder.sCount, 0) sCount, " +
+//                "ifnull(porder.pCount, 0) pCount, " +
                 "potm.operator, " +
                 "potm.operate_time " +
                 "FROM " +
@@ -43,22 +43,23 @@ public class FindOncePurchaseOrderTMListByOrderCodeDAOImpl extends BaseQueryDao
                 "INNER JOIN teach_material tm on potm.teach_material_id = tm.id " +
                 "LEFT JOIN teach_material_stock tms on po.issue_channel_id = tms.issue_channel_id and tm.id = tms.teach_material_id " +
                 "INNER JOIN press p on tm.press_id = p.id " +
-                "LEFT JOIN " +
-                "(select sbo.semester_id, sbo.issue_channel_id, sbotm.teach_material_id, sum(sbotm.count) sCount from student_book_order sbo, student_book_order_tm sbotm  " +
-                "where sbo.order_code = sbotm.order_code and sbo.state > 0 and sbo.state < 4 and sbotm.count > 0 " +
-                "group by sbo.semester_id, sbo.issue_channel_id, sbotm.teach_material_id) sorder on po.semester_id = sorder.semester_id and po.issue_channel_id = sorder.issue_channel_id " +
-                "and potm.teach_material_id = sorder.teach_material_id " +
-                "LEFT JOIN " +
-                "(select tmpo.semester_id, ir.issue_channel_id, potm.teach_material_id, sum(potm.count) pCount  " +
-                "from teach_material_place_order tmpo, place_order_teach_material potm, issue_range ir " +
-                "where tmpo.spot_code = ir.spot_code and tmpo.id = potm.order_id and tmpo.order_status > 0 and tmpo.order_status < 4 and potm.count > 0 " +
-                "group by tmpo.semester_id, ir.issue_channel_id, potm.teach_material_id) porder on po.semester_id = porder.semester_id and po.issue_channel_id = porder.issue_channel_id " +
-                "and potm.teach_material_id = porder.teach_material_id " +
+//                "LEFT JOIN " +
+//                "(select sbo.semester_id, sbo.issue_channel_id, sbotm.teach_material_id, sum(sbotm.count) sCount from student_book_order sbo, student_book_order_tm sbotm  " +
+//                "where sbo.order_code = sbotm.order_code and sbo.state > 0 and sbo.state < 4 and sbotm.count > 0 " +
+//                "group by sbo.semester_id, sbo.issue_channel_id, sbotm.teach_material_id) sorder on po.semester_id = sorder.semester_id and po.issue_channel_id = sorder.issue_channel_id " +
+//                "and potm.teach_material_id = sorder.teach_material_id " +
+//                "LEFT JOIN " +
+//                "(select tmpo.semester_id, ir.issue_channel_id, potm.teach_material_id, sum(potm.count) pCount  " +
+//                "from teach_material_place_order tmpo, place_order_teach_material potm, issue_range ir " +
+//                "where tmpo.spot_code = ir.spot_code and tmpo.id = potm.order_id and tmpo.order_status > 0 and tmpo.order_status < 4 and potm.count > 0 " +
+//                "group by tmpo.semester_id, ir.issue_channel_id, potm.teach_material_id) porder on po.semester_id = porder.semester_id and po.issue_channel_id = porder.issue_channel_id " +
+//                "and potm.teach_material_id = porder.teach_material_id " +
                 "WHERE potm.CODE = ?) t ");
         sbSql.append("left join ");
         sbSql.append("(select dept.name, bs.course_code from semester s, sync_begin_schedule bs, sync_spec spec, sync_department dept where s.year = bs.academic_year and s.quarter = bs.term and s.id = ? and bs.spec_code = spec.code and spec.dept_code = dept.code group by dept.name, bs.course_code) t2 ");
         sbSql.append("on t.course_code = t2.course_code ");
-        sbSql.append("group by id, course_code, pressName, isbn, tmName, author, tmCount, storageCount, operator, operate_time order by deptName");
+//        sbSql.append("group by id, course_code, pressName, isbn, tmName, author, tmCount, storageCount, operator, operate_time order by deptName");
+        sbSql.append("group by id, course_code, pressName, isbn, tmName, author, tmCount, operator, operate_time order by deptName");
 
         List<Object> params = new ArrayList<Object>();
         String orderCode = paramsMap.get("orderCode");

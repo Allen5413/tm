@@ -67,10 +67,10 @@ public class DownOncePurchaseOrderTMServiceImpl extends EntityServiceImpl implem
             ExcelCell runCell_3 = new ExcelCell(index,(byte)4, "ISBN",false,"",30);
             ExcelCell runCell_6 = new ExcelCell(index,(byte)5, "价格",false,"",30);
             ExcelCell runCell_7 = new ExcelCell(index,(byte)6, "数量",false,"",30);
-            ExcelCell runCell_15 = new ExcelCell(index,(byte)7, "学生订单所需数量",false,"",30);
-            ExcelCell runCell_16 = new ExcelCell(index,(byte)8, "预订单所需数量",false,"",30);
-            ExcelCell runCell_17 = new ExcelCell(index,(byte)9, "现有库存",false,"",30);
-            ExcelCell runCell_18 = new ExcelCell(index,(byte)10, "库存差",false,"",30);
+//            ExcelCell runCell_15 = new ExcelCell(index,(byte)7, "学生订单所需数量",false,"",30);
+//            ExcelCell runCell_16 = new ExcelCell(index,(byte)8, "预订单所需数量",false,"",30);
+//            ExcelCell runCell_17 = new ExcelCell(index,(byte)9, "现有库存",false,"",30);
+//            ExcelCell runCell_18 = new ExcelCell(index,(byte)10, "库存差",false,"",30);
             runRow.addExcelCell(runCell_1);
             runRow.addExcelCell(runCell_2);
             runRow.addExcelCell(runCell_3);
@@ -78,20 +78,20 @@ public class DownOncePurchaseOrderTMServiceImpl extends EntityServiceImpl implem
             runRow.addExcelCell(runCell_5);
             runRow.addExcelCell(runCell_6);
             runRow.addExcelCell(runCell_7);
-            runRow.addExcelCell(runCell_15);
-            runRow.addExcelCell(runCell_16);
-            runRow.addExcelCell(runCell_17);
-            runRow.addExcelCell(runCell_18);
+//            runRow.addExcelCell(runCell_15);
+//            runRow.addExcelCell(runCell_16);
+//            runRow.addExcelCell(runCell_17);
+//            runRow.addExcelCell(runCell_18);
             sheet.addExcelRow(runRow);
             index ++;
             for(int i = 0; i < data.size(); i++){
                 JSONObject jsonObject = (JSONObject)data.get(i);
                 ExcelRow runRow_2 = new ExcelRow(index);
                 int tmCount = Integer.parseInt(jsonObject.get("tmCount").toString());
-                int sCount = Integer.parseInt(jsonObject.get("sCount").toString());
-                int pCount = Integer.parseInt(jsonObject.get("pCount").toString());
-                int stock = Integer.parseInt(jsonObject.get("stock").toString());
-                int temp = stock - pCount - sCount - tmCount;
+//                int sCount = Integer.parseInt(jsonObject.get("sCount").toString());
+//                int pCount = Integer.parseInt(jsonObject.get("pCount").toString());
+//                int stock = Integer.parseInt(jsonObject.get("stock").toString());
+//                int temp = stock - pCount - sCount - tmCount;
                 ExcelCell runCell_8 = new ExcelCell(index,(byte)0, jsonObject.get("deptName").toString(),false,"",9);
                 ExcelCell runCell_11 = new ExcelCell(index,(byte)1, jsonObject.get("tmName").toString(),false,"", 9);
                 ExcelCell runCell_12 = new ExcelCell(index,(byte)2, jsonObject.get("author").toString(),false,"",9);
@@ -99,10 +99,10 @@ public class DownOncePurchaseOrderTMServiceImpl extends EntityServiceImpl implem
                 ExcelCell runCell_10 = new ExcelCell(index,(byte)4, jsonObject.get("isbn").toString(),false,"",9);
                 ExcelCell runCell_13 = new ExcelCell(index,(byte)5, jsonObject.get("price").toString(),false,"",9);
                 ExcelCell runCell_14 = new ExcelCell(index,(byte)6, tmCount+"",false,"",9);
-                ExcelCell runCell_19 = new ExcelCell(index,(byte)7, sCount+"",false,"",9);
-                ExcelCell runCell_20 = new ExcelCell(index,(byte)8, pCount+"",false,"",9);
-                ExcelCell runCell_21 = new ExcelCell(index,(byte)9, stock+"",false,"",9);
-                ExcelCell runCell_22 = new ExcelCell(index,(byte)10, temp+"",false,"",9);
+//                ExcelCell runCell_19 = new ExcelCell(index,(byte)7, sCount+"",false,"",9);
+//                ExcelCell runCell_20 = new ExcelCell(index,(byte)8, pCount+"",false,"",9);
+//                ExcelCell runCell_21 = new ExcelCell(index,(byte)9, stock+"",false,"",9);
+//                ExcelCell runCell_22 = new ExcelCell(index,(byte)10, temp+"",false,"",9);
 
                 runRow_2.addExcelCell(runCell_8);
                 runRow_2.addExcelCell(runCell_9);
@@ -111,10 +111,10 @@ public class DownOncePurchaseOrderTMServiceImpl extends EntityServiceImpl implem
                 runRow_2.addExcelCell(runCell_12);
                 runRow_2.addExcelCell(runCell_13);
                 runRow_2.addExcelCell(runCell_14);
-                runRow_2.addExcelCell(runCell_19);
-                runRow_2.addExcelCell(runCell_20);
-                runRow_2.addExcelCell(runCell_21);
-                runRow_2.addExcelCell(runCell_22);
+//                runRow_2.addExcelCell(runCell_19);
+//                runRow_2.addExcelCell(runCell_20);
+//                runRow_2.addExcelCell(runCell_21);
+//                runRow_2.addExcelCell(runCell_22);
 
                 sheet.addExcelRow(runRow_2);
 

@@ -40,7 +40,7 @@ public class FindOncePurchaseOrderTMListByOrderCodeServiceImpl
             for(Object[] objs : resultList){
                 //JSON日期转换必须要传bean，所以这里先把日期format后在设置值
                 PurchaseOrderTeachMaterial purchaseOrderTeachMaterial = new PurchaseOrderTeachMaterial();
-                purchaseOrderTeachMaterial.setOperateTime((Date) objs[15]);
+                purchaseOrderTeachMaterial.setOperateTime((Date) objs[11]);
                 JsonConfig jsonConfig = new JsonConfig();
                 jsonConfig.registerJsonValueProcessor(Date.class, new DateJsonValueProcessorTools());
                 JSONObject jsonObject = JSONObject.fromObject(purchaseOrderTeachMaterial, jsonConfig);
@@ -55,11 +55,11 @@ public class FindOncePurchaseOrderTMListByOrderCodeServiceImpl
                 jsonObject.put("author", objs[7]);
                 jsonObject.put("price", objs[8]);
                 jsonObject.put("tmCount", objs[9]);
-                jsonObject.put("storageCount", objs[10]);
-                jsonObject.put("stock", objs[11]);
-                jsonObject.put("sCount", objs[12]);
-                jsonObject.put("pCount", objs[13]);
-                jsonObject.put("operator", objs[14]);
+//                jsonObject.put("storageCount", objs[10]);
+//                jsonObject.put("stock", objs[11]);
+//                jsonObject.put("sCount", objs[12]);
+//                jsonObject.put("pCount", objs[13]);
+                jsonObject.put("operator", objs[10]);
                 result.add(jsonObject);
             }
             return result;

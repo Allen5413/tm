@@ -18,10 +18,10 @@
       <th style="width: 10%;">ISBN</th>
       <th style="width: 10%;">价格</th>
       <th style="width: 5%;">数量</th>
-      <th style="width: 10%;">学生订单所需数量</th>
-      <th style="width: 10%;">预订单所需数量</th>
-      <th style="width: 5%;">现有库存</th>
-      <th style="width: 5%;">库存差</th>
+      <%--<th style="width: 10%;">学生订单所需数量</th>--%>
+      <%--<th style="width: 10%;">预订单所需数量</th>--%>
+      <%--<th style="width: 5%;">现有库存</th>--%>
+      <%--<th style="width: 5%;">库存差</th>--%>
     </tr>
     <c:if test="${empty resultJson}">
       <tr>
@@ -38,10 +38,10 @@
         <td>${result.isbn}</td>
         <td>${result.price}</td>
         <td>${result.tmCount}</td>
-        <td>${result.sCount}</td>
-        <td>${result.pCount}</td>
-        <td>${result.stock}</td>
-        <td>${result.stock - result.pCount - result.sCount - result.tmCount}</td>
+        <%--<td>${result.sCount}</td>--%>
+        <%--<td>${result.pCount}</td>--%>
+        <%--<td>${result.stock}</td>--%>
+        <%--<td>${result.stock - result.pCount - result.sCount - result.tmCount}</td>--%>
       </tr>
     </c:forEach>
   </table>
