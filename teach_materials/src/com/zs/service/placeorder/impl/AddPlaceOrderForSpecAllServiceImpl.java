@@ -22,6 +22,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by Allen on 2016/11/9.
@@ -100,18 +102,23 @@ public class AddPlaceOrderForSpecAllServiceImpl extends EntityServiceImpl<TeachM
                 teachMaterialPlaceOrder.setIsSpecAll(TeachMaterialPlaceOrder.IS_SPEC_ALL_YES);
                 super.save(teachMaterialPlaceOrder);
 
-                //存储预订单明细数据
+                //存储预订单明细数据; 先用set去除重复课程编号
+                Set<String> courseCodeSet = new HashSet<String>();
                 for(String courseCode : courseCodes.split(",")){
-                    PlaceOrderTeachMaterial placeOrderTeachMaterial = new PlaceOrderTeachMaterial();
-                    placeOrderTeachMaterial.setCount(Long.parseLong(String.valueOf(personNum)));
-                    placeOrderTeachMaterial.setCourseCode(courseCode);
-                    placeOrderTeachMaterial.setCreateTime(DateTools.getLongNowTime());
-                    placeOrderTeachMaterial.setCreator(loginName);
-                    placeOrderTeachMaterial.setOrderId(teachMaterialPlaceOrder.getId());
-                    placeOrderTeachMaterial.setOperator(loginName);
-                    placeOrderTeachMaterial.setOperateTime(DateTools.getLongNowTime());
-                    placeOrderTeachMaterialDAO.save(placeOrderTeachMaterial);
-
+                    courseCodeSet.add(courseCode);
+                }
+                if(null != courseCodeSet && 0 < courseCodeSet.size()){
+                    for (String courseCode : courseCodeSet){
+                        PlaceOrderTeachMaterial placeOrderTeachMaterial = new PlaceOrderTeachMaterial();
+                        placeOrderTeachMaterial.setCount(Long.parseLong(String.valueOf(personNum)));
+                        placeOrderTeachMaterial.setCourseCode(courseCode);
+                        placeOrderTeachMaterial.setCreateTime(DateTools.getLongNowTime());
+                        placeOrderTeachMaterial.setCreator(loginName);
+                        placeOrderTeachMaterial.setOrderId(teachMaterialPlaceOrder.getId());
+                        placeOrderTeachMaterial.setOperator(loginName);
+                        placeOrderTeachMaterial.setOperateTime(DateTools.getLongNowTime());
+                        placeOrderTeachMaterialDAO.save(placeOrderTeachMaterial);
+                    }
                 }
 
                 //存储订单日志
