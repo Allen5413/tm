@@ -165,7 +165,7 @@
   }
 
   function refundWX(code){
-    app.openDialog('${pageContext.request.contextPath}/refundWxStuEByCode/open.htm', '微信退款', 550, 0.2, function(index){
+    app.openDialog('${pageContext.request.contextPath}/refundWxStuEByCode/open.htm', '微信退款', 550, 0.4, function(index){
       var money = $("#money").val().trim();
       if(!vaild.vaildMoney(money)){
         app.msg("请输入正确的金额", 1);

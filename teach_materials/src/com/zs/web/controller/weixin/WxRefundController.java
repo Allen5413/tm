@@ -167,10 +167,13 @@ public class WxRefundController extends LoggerController {
                 wxRefundLog.setPayOrderCode(orderCode);
                 wxRefundLog.setMoney((int) (money * 100));
                 wxRefundLog.setReturnCode(wxMpRefundResult.getReturn_code());
-                wxRefundLog.setReturnMsg(wxMpRefundResult.getErr_code_des());
+                wxRefundLog.setReturnMsg(wxMpRefundResult.getReturn_msg());
                 wxRefundLog.setResultCode(wxMpRefundResult.getResult_code());
                 wxRefundLog.setErrCodeDes(wxMpRefundResult.getErr_code_des());
                 addWxRefundLogService.save(wxRefundLog);
+            }
+            if(!StringUtils.isEmpty(wxMpRefundResult.getReturn_code()) && "FAIL".equals(wxMpRefundResult.getReturn_code())){
+                throw new BusinessException(wxMpRefundResult.getReturn_msg());
             }
             if(!StringUtils.isEmpty(wxMpRefundResult.getErr_code_des())){
                 throw new BusinessException(wxMpRefundResult.getErr_code_des());
