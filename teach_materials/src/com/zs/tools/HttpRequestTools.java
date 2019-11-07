@@ -74,7 +74,7 @@ public class HttpRequestTools {
      */
     public static int reqKuaidi(String nu)throws Exception{
         StringBuilder urlStr = new StringBuilder(kuaidiReqUrl);
-        urlStr.append("?com=ems");
+        urlStr.append("?com=tiantian");
         urlStr.append("&nu="+nu);
         String result = sendGet(urlStr.toString());
         JSONObject json = new JSONObject();
