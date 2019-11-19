@@ -268,7 +268,7 @@ public class SendStudentBookOrderPackageServiceImpl extends EntityServiceImpl<St
         templateMessage.getDatas().add(new WxMpTemplateData("keyword3", "0".equals(json.get("sumAcc").toString()) ?
                 "0".equals(json.get("sumOwn").toString()) ? "0" : "-"+json.get("sumOwn").toString() : json.get("sumAcc").toString()));
 
-        wxMpService.templateSend(templateMessage);
+        //wxMpService.templateSend(templateMessage);
 
     }
 }
