@@ -24,9 +24,17 @@ public class FindTeachMaterialPageByWhereDAOImpl extends BaseQueryDao implements
         teachMaterialPageInfo.setCurrentPage(pageInfo.getCurrentPage());
         teachMaterialPageInfo.setCountOfCurrentPage(pageInfo.getCountOfCurrentPage());
 
+        String isSelectCourseCode = paramsMap.get("isSelectCourseCode");
+
         String field = "*";
-        StringBuilder sql = new StringBuilder("from (select DISTINCT tm.id, tm.isbn, tm.name, tm.author, tm.revision, tm.price, tm.state, tm.is_set, tm.operator, tm.operate_time, tm.is_spot_send, p.name as pressName, tmt.name as tmTypeName, IFNULL(tmc.course_code,stm.buy_course_code) course_code " +
-                "from teach_material tm left join press p on tm.press_id = p.id " +
+        StringBuilder sql = new StringBuilder();
+            if("1".equals(isSelectCourseCode)) {
+                sql.append("from (select DISTINCT tm.id, tm.isbn, tm.name, tm.author, tm.revision, tm.price, tm.state, tm.is_set, tm.operator, tm.operate_time, tm.is_spot_send, p.name as pressName, tmt.name as tmTypeName, IFNULL(tmc.course_code,stm.buy_course_code) course_code ");
+            }
+            if("0".equals(isSelectCourseCode)) {
+                sql.append("from (select DISTINCT tm.id, tm.isbn, tm.name, tm.author, tm.revision, tm.price, tm.state, tm.is_set, tm.operator, tm.operate_time, tm.is_spot_send, p.name as pressName, tmt.name as tmTypeName ");
+            }
+            sql.append("from teach_material tm left join press p on tm.press_id = p.id " +
                 "left join teach_material_type tmt on tm.teach_material_type_id = tmt.id " +
                 "left join teach_material_course tmc on tm.id = tmc.teach_material_id " +
                 "LEFT JOIN set_teach_material_tm stmtm ON tm.id = stmtm.teach_material_id " +

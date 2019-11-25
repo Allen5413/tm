@@ -61,7 +61,7 @@ public class FindTeachMaterialPageByWhereController extends LoggerController {
             PageInfo pageInfo = getPageInfo(request);
             Map<String, Boolean> sortMap = getSortMap(request);
             sortMap.put("t.operate_time", false);
-            pageInfo = findTeachMaterialPageByWhereService.findPageByWhere(pageInfo, params, sortMap);
+            pageInfo = findTeachMaterialPageByWhereService.findPageByWhere2(pageInfo, params, sortMap);
 
             request.setAttribute("teachMaterialTypeList", teachMaterialTypeList);
             request.setAttribute("pressList", pressList);

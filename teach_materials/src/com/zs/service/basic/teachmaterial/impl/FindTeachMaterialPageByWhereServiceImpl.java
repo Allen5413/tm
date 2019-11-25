@@ -31,6 +31,17 @@ public class FindTeachMaterialPageByWhereServiceImpl extends EntityServiceImpl i
     @Override
     @Transactional(value = "transactionManager", rollbackFor = Exception.class)
     public PageInfo findPageByWhere(PageInfo pageInfo, Map<String, String> map, Map<String, Boolean> sortMap) throws Exception {
+        map.put("isSelectCourseCode", "1");
+        return this.findPage(pageInfo, map, sortMap);
+    }
+
+    @Override
+    public PageInfo findPageByWhere2(PageInfo pageInfo, Map<String, String> map, Map<String, Boolean> sortMap) throws Exception {
+        map.put("isSelectCourseCode", "0");
+        return this.findPage(pageInfo, map, sortMap);
+    }
+
+    private PageInfo findPage(PageInfo pageInfo, Map<String, String> map, Map<String, Boolean> sortMap){
         pageInfo = findTeachMaterialPageByWhereDAO.findPageByWhere(pageInfo, map, sortMap);
         if(null != pageInfo && null != pageInfo.getPageResults() && 0 < pageInfo.getPageResults().size()){
             List<Object[]> list = pageInfo.getPageResults();

@@ -9,6 +9,5 @@ import java.util.Map;
  * Created by Allen on 2015/4/27.
  */
 public interface FindPageByWhereDAO {
-
     public PageInfo findPageByWhere(PageInfo pageInfo, Map<String, String> paramsMap, Map<String, Boolean> sortMap);
 }
