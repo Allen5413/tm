@@ -36,6 +36,7 @@ public class FindTeachMaterialPageByWhereServiceImpl extends EntityServiceImpl i
     }
 
     @Override
+    @Transactional(value = "transactionManager", rollbackFor = Exception.class)
     public PageInfo findPageByWhere2(PageInfo pageInfo, Map<String, String> map, Map<String, Boolean> sortMap) throws Exception {
         map.put("isSelectCourseCode", "0");
         return this.findPage(pageInfo, map, sortMap);

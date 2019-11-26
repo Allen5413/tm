@@ -25,21 +25,6 @@ public class FindTeachMaterialPageByWhereDAOImpl extends BaseQueryDao implements
         teachMaterialPageInfo.setCountOfCurrentPage(pageInfo.getCountOfCurrentPage());
 
         String isSelectCourseCode = paramsMap.get("isSelectCourseCode");
-
-        String field = "*";
-        StringBuilder sql = new StringBuilder();
-            if("1".equals(isSelectCourseCode)) {
-                sql.append("from (select DISTINCT tm.id, tm.isbn, tm.name, tm.author, tm.revision, tm.price, tm.state, tm.is_set, tm.operator, tm.operate_time, tm.is_spot_send, p.name as pressName, tmt.name as tmTypeName, IFNULL(tmc.course_code,stm.buy_course_code) course_code ");
-            }
-            if("0".equals(isSelectCourseCode)) {
-                sql.append("from (select DISTINCT tm.id, tm.isbn, tm.name, tm.author, tm.revision, tm.price, tm.state, tm.is_set, tm.operator, tm.operate_time, tm.is_spot_send, p.name as pressName, tmt.name as tmTypeName ");
-            }
-            sql.append("from teach_material tm left join press p on tm.press_id = p.id " +
-                "left join teach_material_type tmt on tm.teach_material_type_id = tmt.id " +
-                "left join teach_material_course tmc on tm.id = tmc.teach_material_id " +
-                "LEFT JOIN set_teach_material_tm stmtm ON tm.id = stmtm.teach_material_id " +
-                "LEFT JOIN set_teach_material stm ON stmtm.set_teach_material_id = stm.id " +
-                "where 1=1 ");
         String isbn = paramsMap.get("isbn");
         String name = paramsMap.get("name");
         String isExactName = paramsMap.get("isExactName");
@@ -50,6 +35,21 @@ public class FindTeachMaterialPageByWhereDAOImpl extends BaseQueryDao implements
         String author = paramsMap.get("author");
         String price = paramsMap.get("price");
         String isGlCourse = paramsMap.get("isGlCourse");
+
+        String field = "*";
+        StringBuilder sql = new StringBuilder();
+        if("1".equals(isSelectCourseCode) || StringUtils.isNotBlank(courseCode)) {
+            sql.append("from (select DISTINCT tm.id, tm.isbn, tm.name, tm.author, tm.revision, tm.price, tm.state, tm.is_set, tm.operator, tm.operate_time, tm.is_spot_send, p.name as pressName, tmt.name as tmTypeName, IFNULL(tmc.course_code,stm.buy_course_code) course_code ");
+        }
+        if("0".equals(isSelectCourseCode) && StringUtils.isBlank(courseCode)) {
+            sql.append("from (select DISTINCT tm.id, tm.isbn, tm.name, tm.author, tm.revision, tm.price, tm.state, tm.is_set, tm.operator, tm.operate_time, tm.is_spot_send, p.name as pressName, tmt.name as tmTypeName ");
+        }
+        sql.append("from teach_material tm left join press p on tm.press_id = p.id " +
+                "left join teach_material_type tmt on tm.teach_material_type_id = tmt.id " +
+                "left join teach_material_course tmc on tm.id = tmc.teach_material_id " +
+                "LEFT JOIN set_teach_material_tm stmtm ON tm.id = stmtm.teach_material_id " +
+                "LEFT JOIN set_teach_material stm ON stmtm.set_teach_material_id = stm.id " +
+                "where 1=1 ");
 
         List<Object> param = new ArrayList<Object>();
         if(!StringUtils.isEmpty(isbn)){
